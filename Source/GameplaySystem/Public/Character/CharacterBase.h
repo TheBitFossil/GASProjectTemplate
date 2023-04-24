@@ -40,6 +40,15 @@ public:
 	UPROPERTY(BlueprintCallable, Category ="GAS|Character")
 	virtual void FinishDeath();
 
+	// Getters and Setters for our AttributeSet
+	UFUNCTION(BlueprintCallable, Category="GAS|Character|Attributes")
+	float GetHealth() const;
+	UFUNCTION(BlueprintCallable, Category="GAS|Character|Attributes")
+	float GetMaxHealth() const;
+	UFUNCTION(BlueprintCallable, Category="GAS|Character|Attributes")
+	float GetMana() const;
+	UFUNCTION(BlueprintCallable, Category="GAS|Character|Attributes")
+	float GetMaxMana() const;
 
 
 	
