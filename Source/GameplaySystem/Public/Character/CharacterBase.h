@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
+#include "GameplayTagContainer.h"
 #include "GameplaySystem/GameplaySystem.h"
 #include "CharacterBase.generated.h"
 
@@ -61,6 +62,10 @@ protected:
 	TWeakObjectPtr<class UCharacterAbilitySystemComponent> AbilitySystemComponent;
 	// Same for the AttributeSet
 	TWeakObjectPtr<class UCharacterAttributeSetBase> AttributeSetBase;
+
+	// Gameplay Tags
+	FGameplayTag DeathTag;
+	FGameplayTag EffectRemovedTag;
 
 
 
