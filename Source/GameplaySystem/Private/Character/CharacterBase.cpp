@@ -4,11 +4,34 @@
 #include "Character/CharacterBase.h"
 
 // Sets default values
-ACharacterBase::ACharacterBase()
+ACharacterBase::ACharacterBase(const FObjectInitializer& ObjectInitializer)
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+}
 
+bool ACharacterBase::IsAlive() const
+{
+}
+
+int32 ACharacterBase::GetAbilityLevel(GameplayAbilityID AbilityID) const
+{
+}
+
+void ACharacterBase::RemoveCharacterAbilities()
+{
+}
+
+void ACharacterBase::Death()
+{
+}
+
+void ACharacterBase::FinishDeath()
+{
+}
+
+float ACharacterBase::GetHealth() const
+{
 }
 
 // Called when the game starts or when spawned
@@ -30,5 +53,10 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+UAbilitySystemComponent* ACharacterBase::GetAbilitySystemComponent() const
+{
+	return GetAbilitySystemComponent();
 }
 
