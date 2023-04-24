@@ -4,10 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "AttributeSet.h"
+#include "AbilitySystemComponent.h"
 #include "CharacterAttributeSetBase.generated.h"
 
 // Uses macros from AttributeSet.h
-// Helps us to access Getters and Setters
 #define ATTRIBUTE_ACCESSORS(ClassName, PropertyName) \
 	GAMEPLAYATTRIBUTE_PROPERTY_GETTER(ClassName, PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
@@ -21,5 +21,49 @@ UCLASS()
 class GAMEPLAYSYSTEM_API UCharacterAttributeSetBase : public UAttributeSet
 {
 	GENERATED_BODY()
+
+
+public:
+	UCharacterAttributeSetBase();
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Health", ReplicatedUsing = OnRep_Health)
+	FGameplayAttributeData Health;
+	ATTRIBUTE_ACCESSORS(UCharacterAttributeSetBase, Health)
+	
+	UPROPERTY(BlueprintReadOnly, Category="Health", ReplicatedUsing = OnRep_MaxHealth)
+	FGameplayAttributeData MaxHealth;
+	ATTRIBUTE_ACCESSORS(UCharacterAttributeSetBase, MaxHealth)
+
+	UPROPERTY(BlueprintReadOnly, Category="Mana", ReplicatedUsing = OnRep_Mana)
+	FGameplayAttributeData Mana;
+	ATTRIBUTE_ACCESSORS(UCharacterAttributeSetBase, Mana);
+
+	UPROPERTY(BlueprintReadOnly, Category="Mana", ReplicatedUsing = OnRep_MaxMana)
+	FGameplayAttributeData MaxMana;
+	ATTRIBUTE_ACCESSORS(UCharacterAttributeSetBase, MaxMana);
+
+	// Cached Damage value , to better calculate total damage from all possible AbilitySources
+	// Only exist on the server
+	UPROPERTY(BlueprintReadOnly, Category ="Damage")
+	FGameplayAttributeData Damage;
+	ATTRIBUTE_ACCESSORS(UCharacterAttributeSetBase, Damage);
+
+	
+protected:
+	UFUNCTION()
+	virtual void OnRep_Health(const FGameplayAttributeData& OldHealth);
+
+	UFUNCTION()
+	virtual void OnRep_MaxHealth(const FGameplayAttributeData& OldMaxHealth);
+
+	UFUNCTION()
+	virtual void OnRep_Mana(const FGameplayAttributeData& OldMana);
+
+	UFUNCTION()
+	virtual void OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana);
+
+	
 	
 };
