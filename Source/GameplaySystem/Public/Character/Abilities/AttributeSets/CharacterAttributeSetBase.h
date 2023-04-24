@@ -44,7 +44,7 @@ public:
 	FGameplayAttributeData MaxMana;
 	ATTRIBUTE_ACCESSORS(UCharacterAttributeSetBase, MaxMana);
 
-	// Cached Damage value , to better calculate total damage from all possible AbilitySources
+	// Cached Damage value, to better calculate total damage from all possible AbilitySources
 	// Only exist on the server
 	UPROPERTY(BlueprintReadOnly, Category ="Damage")
 	FGameplayAttributeData Damage;
