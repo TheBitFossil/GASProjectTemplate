@@ -67,7 +67,14 @@ protected:
 	FGameplayTag DeathTag;
 	FGameplayTag EffectRemovedTag;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category ="GAS| Anims")
+	UAnimMontage* DeathMontage;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category ="GAS|Character")
+	FText CharacterName;
+	
+	virtual void SetHealth();
+	virtual void SetMana();
 
 	
 public:	
