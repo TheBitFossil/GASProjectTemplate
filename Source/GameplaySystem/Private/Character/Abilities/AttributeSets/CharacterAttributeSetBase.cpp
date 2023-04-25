@@ -12,6 +12,7 @@ void UCharacterAttributeSetBase::GetLifetimeReplicatedProps(TArray<FLifetimeProp
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
+	// We notify when the values are changed
 	DOREPLIFETIME_CONDITION_NOTIFY(UCharacterAttributeSetBase, Health, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UCharacterAttributeSetBase, MaxHealth, COND_None, REPNOTIFY_Always);
 

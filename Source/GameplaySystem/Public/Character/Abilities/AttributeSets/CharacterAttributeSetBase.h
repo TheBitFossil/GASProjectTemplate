@@ -26,6 +26,7 @@ class GAMEPLAYSYSTEM_API UCharacterAttributeSetBase : public UAttributeSet
 public:
 	UCharacterAttributeSetBase();
 
+	//Returns properties used by Network Replication
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Health", ReplicatedUsing = OnRep_Health)
