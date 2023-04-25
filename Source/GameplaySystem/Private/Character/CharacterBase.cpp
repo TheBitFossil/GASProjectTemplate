@@ -12,6 +12,7 @@ ACharacterBase::ACharacterBase(const FObjectInitializer& ObjectInitializer)
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	// Network Replication
 	bAlwaysRelevant = true;
 
 	// Corresponding GameplayTags to recurring Actions
@@ -31,12 +32,25 @@ int32 ACharacterBase::GetAbilityLevel(GameplayAbilityID AbilityID) const
 
 void ACharacterBase::RemoveCharacterAbilities()
 {
-
-	
-	/*if(AbilitySystemComponent.IsValid())
+	// We are removing the Abilities from server side
+	// Lets make sure that we are on the Server, Have AbilitySystem, Have granted Abilities
+	if(GetLocalRole() != ROLE_Authority
+		|| false == AbilitySystemComponent.IsValid()
+		|| false == AbilitySystemComponent->bCharacterAbilitiesGiven)
 	{
-		AbilitySystemComponent->RemoveActiveEffects()
-	}*/
+		return;
+	}
+	
+	// Remove any Abilities from a granted call
+	TArray<FGameplayAbilitySpec> AbilitiesToRemove;
+	for (const FGameplayAbilitySpec& Spec: AbilitySystemComponent->GetActivatableAbilities())
+	{
+		// Check if the Ability was created from this object(owner) and CharacterAbilities has 
+		//if(Spec.SourceObject == this && CharacterAbilities)
+
+		
+		AbilitiesToRemove.Add(Spec);
+	}
 }
 
 void ACharacterBase::Death()
