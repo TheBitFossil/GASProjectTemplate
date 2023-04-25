@@ -3,6 +3,7 @@
 
 #include "Character/CharacterBase.h"
 
+#include "Character/Abilities/CharacterAbilitySystemComponent.h"
 #include "Character/Abilities/AttributeSets/CharacterAttributeSetBase.h"
 
 // Sets default values
@@ -10,18 +11,32 @@ ACharacterBase::ACharacterBase(const FObjectInitializer& ObjectInitializer)
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	bAlwaysRelevant = true;
+
+	// Corresponding GameplayTags to recurring Actions
+	DeathTag = FGameplayTag::RequestGameplayTag(FName("State.Dead"));
+	EffectRemovedTag = FGameplayTag::RequestGameplayTag(FName("Effect.RemoveOnDeath"));
 }
 
 bool ACharacterBase::IsAlive() const
 {
+	return GetHealth() > 0.0f;
 }
 
 int32 ACharacterBase::GetAbilityLevel(GameplayAbilityID AbilityID) const
 {
+	return 1;
 }
 
 void ACharacterBase::RemoveCharacterAbilities()
 {
+
+	
+	/*if(AbilitySystemComponent.IsValid())
+	{
+		AbilitySystemComponent->RemoveActiveEffects()
+	}*/
 }
 
 void ACharacterBase::Death()
