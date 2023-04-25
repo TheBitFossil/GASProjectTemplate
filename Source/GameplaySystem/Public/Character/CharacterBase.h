@@ -41,18 +41,20 @@ public:
 	UPROPERTY(BlueprintCallable, Category ="GAS|Character")
 	virtual void FinishDeath();
 
-	// Getters and Setters for our AttributeSet
+	// Getters for our AttributeSet
 	UFUNCTION(BlueprintCallable, Category="GAS|Character|Attributes")
 	float GetHealth() const;
+	
 	UFUNCTION(BlueprintCallable, Category="GAS|Character|Attributes")
 	float GetMaxHealth() const;
+	
 	UFUNCTION(BlueprintCallable, Category="GAS|Character|Attributes")
 	float GetMana() const;
+	
 	UFUNCTION(BlueprintCallable, Category="GAS|Character|Attributes")
 	float GetMaxMana() const;
 
 
-	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -67,14 +69,19 @@ protected:
 	FGameplayTag DeathTag;
 	FGameplayTag EffectRemovedTag;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category ="GAS| Anims")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category ="GAS|Anims")
 	UAnimMontage* DeathMontage;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category ="GAS|Character")
 	FText CharacterName;
-	
-	virtual void SetHealth();
-	virtual void SetMana();
+
+	// This is an instant GE that overrides the values for attributes that get reset on spawn/respawn.
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category ="GAS|Abilities")
+	TSubclassOf<class UGameplayEffect> DefaultAttributes;
+
+	// Setters for our AttributeSet
+	virtual void SetHealth(float NewHealth);
+	virtual void SetMana(float NewMana);
 
 	
 public:	
