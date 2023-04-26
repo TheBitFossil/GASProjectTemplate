@@ -4,6 +4,7 @@
 #include "Character/CharacterBase.h"
 
 #include "Character/Abilities/CharacterAbilitySystemComponent.h"
+#include "Character/Abilities/GGameplayAbility.h"
 #include "Character/Abilities/AttributeSets/CharacterAttributeSetBase.h"
 
 // Sets default values
@@ -103,6 +104,45 @@ float ACharacterBase::GetMaxMana() const
 void ACharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
+	
+}
+
+void ACharacterBase::AddCharacterAbilities()
+{
+	// The ASC and Server will grant us, if we don't have them already
+	if(GetLocalRole() != ROLE_Authority
+		|| false == AbilitySystemComponent.IsValid()
+		|| AbilitySystemComponent->bCharacterAbilitiesGiven)
+	{
+		return;
+	}
+
+	// We check all Abilities inside our CharacterAbilities
+	for (TSubclassOf<class UGGameplayAbility> Ability : CharacterAbilities)
+	{
+		// Because the ASC is the Root. It will start giving or removing Abilities
+		AbilitySystemComponent->GiveAbility(
+			// The Spec holds the data for each Ability
+			FGameplayAbilitySpec(Ability,
+				GetAbilityLevel(Ability.GetDefaultObject()->AbilityID)
+				,static_cast<int32>(Ability.GetDefaultObject()->AbilityID)
+				,this
+			)
+		);
+	}
+
+	// by now we should have granted the default abilities
+	AbilitySystemComponent->bCharacterAbilitiesGiven = true;
+}
+
+void ACharacterBase::InitAttributes()
+{
+	if(false == AbilitySystemComponent)
+	{
+		return;
+	}
+
+	
 	
 }
 

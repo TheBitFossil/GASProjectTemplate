@@ -75,14 +75,29 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category ="GAS|Character")
 	FText CharacterName;
 
-	// This is an instant GE that overrides the values for attributes that get reset on spawn/respawn.
+	// This is an instant GE that overrides the values for Default Attributes
+	// get reset on spawn/respawn.
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category ="GAS|Abilities")
 	TSubclassOf<class UGameplayEffect> DefaultAttributes;
 
-	// Default Abilities that are granted on respawn and taken on death
-	//UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="GAS|Abilities")
-//	TSubclassOf<class UAbili>
+	// This is an instant GE that overrides the value for Default Abilities
+	// regiven on respawn and removed on death
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="GAS|Abilities")
+	TSubclassOf<class UGGameplayAbility> CharacterAbilities;
 
+	// These effects only apply on startup
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="GAS|Abilities")
+	TSubclassOf<class UGameplayEffect> StartupEffects;
+
+	// Server grants Abilities
+	virtual void AddCharacterAbilities();
+
+	// Server grants Attributes, can be run on client for faster init
+	virtual void InitAttributes();
+
+	// 
+	virtual void AddStartupEffects();
+	
 	
 	// Setters for our AttributeSet
 	virtual void SetHealth(float NewHealth);
@@ -96,6 +111,6 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	// Interface
+	// Implement AbilitySystemInterface
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 };

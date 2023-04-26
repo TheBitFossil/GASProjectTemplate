@@ -18,7 +18,8 @@ void UGGameplayAbility::OnAvatarSet(const FGameplayAbilityActorInfo* ActorInfo, 
 {
 	Super::OnAvatarSet(ActorInfo, Spec);
 
-	// If we want the Ability to be activated on granted
+	// This runs automatically when an Ability is activated AND bActivateOnGranted
+	// TWe are using this for passives tat can not be activated via input
 	if(bActivateAbilityOnGranted)
 	{
 		ActorInfo->AbilitySystemComponent->TryActivateAbility(Spec.Handle, false);
