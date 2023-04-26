@@ -2,11 +2,9 @@
 
 #pragma once
 
-#include <elf.h>
-
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
-#include "GameplayTagContainer.h"
+#include "GameplayEffectTypes.h"
 #include "GameFramework/PlayerState.h"
 #include "GPlayerState.generated.h"
 
@@ -20,14 +18,17 @@ class GAMEPLAYSYSTEM_API AGPlayerState : public APlayerState, public IAbilitySys
 public:
 	AGPlayerState();
 
-	// Implemented by the IAbilityInterface
-	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	// Implement AbilitySystemInterface
+	virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
-	class UGAttributeSetBase* GetAttributeSet();
+	class UCharacterAttributeSetBase* GetAttributeSet();
 
 	UFUNCTION(BlueprintCallable, Category="GAS|PlayerState")
 	bool IsAlive() const;
 
+	UFUNCTION(BlueprintCallable, Category ="GAS|PlayerState|UI")
+	void ShowAbilityConfirmCancelText(bool Message);
+	
 	/**	Getters and Setters	from the AttributeSetBase ( Current Value )**/
 	UFUNCTION(BlueprintCallable, Category="GAS|PlayerState|Attributes")
 	float GetHealth() const;
@@ -48,12 +49,13 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	
+
+	// Our own created ASC, that we put on the PlayerCharacter
 	UPROPERTY()
-	class UGAbilitySystemComponent* AbilitySystemComponent;
+	class UCharacterAbilitySystemComponent* AbilitySystemComponent;
 
 	UPROPERTY()
-	class UGAttributeSetBase* AttributeSetBase;
+	class UCharacterAttributeSetBase* AttributeSetBase;
 
 	FGameplayTag DeadTag;
 
@@ -71,10 +73,5 @@ protected:
 	virtual void ManaChanged(const FOnAttributeChangeData& Data);
 	virtual void MaxManaChanged(const FOnAttributeChangeData& Data);
 	virtual void CharacterLevelChanged(const FOnAttributeChangeData& Data);
-
-	
-
-
-
 
 };

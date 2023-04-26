@@ -66,7 +66,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	// Interface Object needs to be created before we can make a call to it
-	// But we are using a soft reference for it
+	// But we are using a soft reference for it. The real components are on the PlayerState
 	TWeakObjectPtr<class UCharacterAbilitySystemComponent> AbilitySystemComponent;
 	// Same for the AttributeSet
 	TWeakObjectPtr<class UCharacterAttributeSetBase> AttributeSetBase;
