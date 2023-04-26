@@ -6,6 +6,8 @@
 #include "Character/Abilities/CharacterAbilitySystemComponent.h"
 #include "Character/Abilities/GGameplayAbility.h"
 #include "Character/Abilities/AttributeSets/CharacterAttributeSetBase.h"
+#include "Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 ACharacterBase::ACharacterBase(const FObjectInitializer& ObjectInitializer)
@@ -13,12 +15,16 @@ ACharacterBase::ACharacterBase(const FObjectInitializer& ObjectInitializer)
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	// Collision Check
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Overlap);
+
+	
 	// Network Replication
 	bAlwaysRelevant = true;
 
 	// Corresponding GameplayTags to recurring Actions
 	DeathTag = FGameplayTag::RequestGameplayTag(FName("State.Dead"));
-	EffectRemovedTag = FGameplayTag::RequestGameplayTag(FName("Effect.RemoveOnDeath"));
+	EffectRemoveOnDeathTag = FGameplayTag::RequestGameplayTag(FName("Effect.RemoveOnDeath"));
 }
 
 bool ACharacterBase::IsAlive() const
@@ -42,24 +48,75 @@ void ACharacterBase::RemoveCharacterAbilities()
 		return;
 	}
 	
-	// Remove any Abilities from a granted call
-	TArray<FGameplayAbilitySpec> AbilitiesToRemove;
+	// The name or Handle  of the Abilities, we want to remove
+	TArray<FGameplayAbilitySpecHandle> AbilitiesToRemove;
+	
+	// Iterating over all ActivatableAbilities
 	for (const FGameplayAbilitySpec& Spec: AbilitySystemComponent->GetActivatableAbilities())
 	{
-		// Check if the Ability was created from this object(owner) and CharacterAbilities has 
-		//if(Spec.SourceObject == this && CharacterAbilities)
-
+		// Check if the Ability was created from this object(owner)
+		//TODO: What exactly are we checking in the array?
 		
-		AbilitiesToRemove.Add(Spec);
+		if ((Spec.SourceObject == this) && CharacterAbilities.Contains(Spec.Ability->GetClass()))
+		{
+			AbilitiesToRemove.Add(Spec.Handle);
+		}
 	}
+
+	// Second Time, only remove when we have to full list of Abilities
+	for (int32 i = 0; i < AbilitiesToRemove.Num(); i++)
+	{
+		AbilitySystemComponent->ClearAbility(AbilitiesToRemove[i]);
+	}
+
+	// Then tell the ASC that we do not have any Abilities left over
+	AbilitySystemComponent->bCharacterAbilitiesGiven = false;
 }
 
+// Runs on the Server and all Clients
 void ACharacterBase::Death()
 {
+	RemoveCharacterAbilities();
+
+	// Take care of the  Character Visuals and Collision
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetCharacterMovement()->GravityScale = 0;
+	GetCharacterMovement()->Velocity = FVector(0);
+
+	// Send Event, that we are dead
+	// TODO: Who gets the Broadcast?
+	OnCharacterDied.Broadcast(this);
+
+	// Always check if we have an ASC
+	if(AbilitySystemComponent.IsValid())
+	{
+		// The ASC takes care of Abilities
+		AbilitySystemComponent->CancelAbilities();
+
+		// Container that holds GameplayTags
+		FGameplayTagContainer EffectTagsToRemove;
+		// Fill Container with Tags
+		EffectTagsToRemove.AddTag(EffectRemoveOnDeathTag);
+		// Count the Number of removed Effects
+		int32 NumOfEffectsRemoved = AbilitySystemComponent->RemoveActiveEffectsWithTags(EffectTagsToRemove);
+
+		// Add the new tag, so we can react to the new state
+		AbilitySystemComponent->AddLooseGameplayTag(DeathTag);
+	}
+
+	if(DeathMontage)
+	{
+		PlayAnimMontage(DeathMontage);
+	}
+	else
+	{
+		FinishDeath();
+	}
 }
 
 void ACharacterBase::FinishDeath()
 {
+	Destroy();
 }
 
 float ACharacterBase::GetHealth() const

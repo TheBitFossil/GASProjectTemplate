@@ -67,7 +67,7 @@ protected:
 
 	// Gameplay Tags
 	FGameplayTag DeathTag;
-	FGameplayTag EffectRemovedTag;
+	FGameplayTag EffectRemoveOnDeathTag;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category ="GAS|Anims")
 	UAnimMontage* DeathMontage;
