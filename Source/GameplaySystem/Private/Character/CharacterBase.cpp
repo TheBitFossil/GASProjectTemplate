@@ -138,6 +138,6 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 UAbilitySystemComponent* ACharacterBase::GetAbilitySystemComponent() const
 {
-	return GetAbilitySystemComponent();
+	return AbilitySystemComponent.Get();
 }
 

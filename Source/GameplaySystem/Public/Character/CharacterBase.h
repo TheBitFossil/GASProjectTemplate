@@ -9,7 +9,7 @@
 #include "GameplaySystem/GameplaySystem.h"
 #include "CharacterBase.generated.h"
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FCharacterDiedDelegate, ACharacterBase*, Character)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCharacterDiedDelegate, ACharacterBase*, Character);
 
 
 UCLASS()
@@ -21,15 +21,15 @@ public:
 	// Sets default values for this character's properties
 	ACharacterBase(const class FObjectInitializer& ObjectInitializer);
 
-	UPROPERTY(BlueprintAssignable, Category ="GAS|Character")
 	// Death Event Delegate
+	UPROPERTY(BlueprintAssignable, Category ="GAS|Character")
 	FCharacterDiedDelegate OnCharacterDied;
 
-	UPROPERTY(BlueprintCallable, Category ="GAS|Character")
+	UFUNCTION(BlueprintCallable, Category ="GAS|Character")
 	virtual bool IsAlive() const;
 
 	// Return the individual ability we are using right now
-	UPROPERTY(BlueprintCallable, Category ="GAS|Character")
+	UFUNCTION(BlueprintCallable, Category ="GAS|Character")
 	virtual int32 GetAbilityLevel(GameplayAbilityID AbilityID) const;
 
 	// Remove the individual ability outgoing from the Server
@@ -38,7 +38,7 @@ public:
 	// Death handling
 	virtual void Death();
 	
-	UPROPERTY(BlueprintCallable, Category ="GAS|Character")
+	UFUNCTION(BlueprintCallable, Category ="GAS|Character")
 	virtual void FinishDeath();
 
 	// Getters for our AttributeSet
@@ -80,7 +80,7 @@ protected:
 	TSubclassOf<class UGameplayEffect> DefaultAttributes;
 
 	// Default Abilities that are granted on respawn and taken on death
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="GAS|Abilities")
+	//UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="GAS|Abilities")
 //	TSubclassOf<class UAbili>
 
 	
