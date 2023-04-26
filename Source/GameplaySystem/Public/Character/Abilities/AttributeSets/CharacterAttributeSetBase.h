@@ -45,6 +45,10 @@ public:
 	FGameplayAttributeData MaxMana;
 	ATTRIBUTE_ACCESSORS(UCharacterAttributeSetBase, MaxMana);
 
+	UPROPERTY(BlueprintReadOnly, Category="Character Level", ReplicatedUsing = OnRep_CharacterLevel)
+	FGameplayAttributeData CharacterLevel;
+	ATTRIBUTE_ACCESSORS(UCharacterAttributeSetBase, CharacterLevel);
+	
 	// Cached Damage value, to better calculate total damage from all possible AbilitySources
 	// Only exist on the server
 	UPROPERTY(BlueprintReadOnly, Category ="Damage")
@@ -65,6 +69,7 @@ protected:
 	UFUNCTION()
 	virtual void OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana);
 
-	
+	UFUNCTION()
+	virtual void OnRep_CharacterLevel(const FGameplayAttributeData& OldCharacterLevel);
 	
 };

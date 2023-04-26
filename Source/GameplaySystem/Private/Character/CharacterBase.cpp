@@ -10,14 +10,14 @@
 #include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
-ACharacterBase::ACharacterBase(const FObjectInitializer& ObjectInitializer)
+ACharacterBase::ACharacterBase(const FObjectInitializer& ObjectInitializer) :
+	Super(ObjectInitializer.SetDefaultSubobjectClass<UCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	// Collision Check
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Overlap);
-
 	
 	// Network Replication
 	bAlwaysRelevant = true;
@@ -71,6 +71,16 @@ void ACharacterBase::RemoveCharacterAbilities()
 
 	// Then tell the ASC that we do not have any Abilities left over
 	AbilitySystemComponent->bCharacterAbilitiesGiven = false;
+}
+
+int32 ACharacterBase::GetCharacterLevel() const
+{
+	if(AbilitySystemComponent.IsValid())
+	{
+		// TODO: Why am I using static_cast so often?
+		return static_cast<int32>(AttributeSetBase->GetCharacterLevel());
+	}
+	return 0;
 }
 
 // Runs on the Server and all Clients
@@ -198,12 +208,69 @@ void ACharacterBase::InitAttributes()
 	{
 		return;
 	}
-	
+
+	if(nullptr == DefaultAttributes)
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s() Missing DefaultAttributes for %s. Please fill in the character's Blueprint.")
+			,*FString(__FUNCTION__)
+			,*GetName());
+
+		return;
+	}
+
+	// Where the Effect will be added to: Can be run on Server and Client
+	FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComponent->MakeEffectContext();
+	EffectContextHandle.AddSourceObject(this);
+
+	// What the Effect is made of: Data for our next Attributes
+	FGameplayEffectSpecHandle NewHandle =
+		AbilitySystemComponent->MakeOutgoingSpec(DefaultAttributes,GetCharacterLevel(),EffectContextHandle);
+
+	// Do we have an Effect to add: Check if the Data is available to us, so we can Initialize it
+	if(NewHandle.IsValid())
+	{
+		// We do have Attributes to initialize
+		// TODO: Check why I need to dereference here
+		FActiveGameplayEffectHandle ActiveGEHandle =
+			AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(
+				*NewHandle.Data.Get()
+				,AbilitySystemComponent.Get());
+	}
 }
 
 void ACharacterBase::AddStartupEffects()
 {
-	return;
+	if(GetLocalRole() != ROLE_Authority
+		|| false == AbilitySystemComponent.IsValid()
+		|| AbilitySystemComponent->bStartupEffectsApplied)
+	{
+		return;
+	}
+
+	// Where we are using this Effect, the owner
+	FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComponent->MakeEffectContext();
+	EffectContextHandle.AddSourceObject(this);
+
+	// Get all Effects that are available for Startup
+	for (const TSubclassOf<UGameplayEffect>& Effect: StartupEffects)
+	{
+		FGameplayEffectSpecHandle NewHandle =
+			AbilitySystemComponent->MakeOutgoingSpec(Effect, GetCharacterLevel(), EffectContextHandle);
+
+		// If we found an Effect
+		if(NewHandle.IsValid())
+		{
+			// We can then apply it to the owner, via the ASC
+			FActiveGameplayEffectHandle ActiveGEHandle =
+				AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(
+					*NewHandle.Data.Get()
+					,AbilitySystemComponent.Get()
+				);
+		}
+	}
+
+	// Set the flag, that we have added Startup Effects
+	AbilitySystemComponent->bStartupEffectsApplied = true;
 }
 
 void ACharacterBase::SetHealth(float NewHealth)
@@ -220,20 +287,6 @@ void ACharacterBase::SetMana(float NewMana)
 	{
 		AttributeSetBase->SetMana(NewMana);
 	}
-}
-
-// Called every frame
-void ACharacterBase::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
-// Called to bind functionality to input
-void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 }
 
 UAbilitySystemComponent* ACharacterBase::GetAbilitySystemComponent() const

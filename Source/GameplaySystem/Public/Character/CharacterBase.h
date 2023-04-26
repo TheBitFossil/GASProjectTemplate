@@ -21,10 +21,10 @@ public:
 	// Sets default values for this character's properties
 	ACharacterBase(const class FObjectInitializer& ObjectInitializer);
 
-	// Death Event Delegate
-	UPROPERTY(BlueprintAssignable, Category ="GAS|Character")
-	FCharacterDiedDelegate OnCharacterDied;
-
+	// Implement AbilitySystemInterface
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	
+	
 	UFUNCTION(BlueprintCallable, Category ="GAS|Character")
 	virtual bool IsAlive() const;
 
@@ -35,12 +35,19 @@ public:
 	// Remove the individual ability outgoing from the Server
 	virtual void RemoveCharacterAbilities();
 
+	UFUNCTION(BlueprintCallable, Category ="GAS|Character")
+	virtual int32 GetCharacterLevel() const;
+
 	// Death handling
 	virtual void Death();
 	
 	UFUNCTION(BlueprintCallable, Category ="GAS|Character")
 	virtual void FinishDeath();
 
+	// Death Event Delegate
+	UPROPERTY(BlueprintAssignable, Category ="GAS|Character")
+	FCharacterDiedDelegate OnCharacterDied;
+	
 	// Getters for our AttributeSet
 	UFUNCTION(BlueprintCallable, Category="GAS|Character|Attributes")
 	float GetHealth() const;
@@ -53,7 +60,6 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category="GAS|Character|Attributes")
 	float GetMaxMana() const;
-
 
 protected:
 	// Called when the game starts or when spawned
@@ -88,29 +94,17 @@ protected:
 	// These Effects only apply on startup
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="GAS|Abilities")
 	TArray<TSubclassOf<class UGameplayEffect>> StartupEffects;
-
+	
 	// Server grants Abilities
 	virtual void AddCharacterAbilities();
 
 	// Server grants Attributes, can be run on client for faster init
 	virtual void InitAttributes();
 
-	// 
+	// Here we are adding the Effects to our Character
 	virtual void AddStartupEffects();
-	
 	
 	// Setters for our AttributeSet
 	virtual void SetHealth(float NewHealth);
 	virtual void SetMana(float NewMana);
-
-	
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	// Implement AbilitySystemInterface
-	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 };
