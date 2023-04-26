@@ -2,8 +2,8 @@
 
 
 #include "Character/Abilities/GGameplayAbility.h"
-
 #include "AbilitySystemComponent.h"
+#include "GameplayTagContainer.h"
 
 UGGameplayAbility::UGGameplayAbility()
 {

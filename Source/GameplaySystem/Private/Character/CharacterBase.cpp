@@ -116,9 +116,9 @@ void ACharacterBase::AddCharacterAbilities()
 	{
 		return;
 	}
-
+	
 	// We check all Abilities inside our CharacterAbilities
-	for (TSubclassOf<class UGGameplayAbility> Ability : CharacterAbilities)
+	for (TSubclassOf<UGGameplayAbility>& Ability : CharacterAbilities)
 	{
 		// Because the ASC is the Root. It will start giving or removing Abilities
 		AbilitySystemComponent->GiveAbility(
@@ -130,20 +130,23 @@ void ACharacterBase::AddCharacterAbilities()
 			)
 		);
 	}
-
+	
 	// by now we should have granted the default abilities
 	AbilitySystemComponent->bCharacterAbilitiesGiven = true;
 }
 
 void ACharacterBase::InitAttributes()
 {
-	if(false == AbilitySystemComponent)
+	if(false == AbilitySystemComponent.IsValid())
 	{
 		return;
 	}
+	
+}
 
-	
-	
+void ACharacterBase::AddStartupEffects()
+{
+	return;
 }
 
 void ACharacterBase::SetHealth(float NewHealth)

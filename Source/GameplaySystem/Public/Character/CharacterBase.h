@@ -83,11 +83,11 @@ protected:
 	// This is an instant GE that overrides the value for Default Abilities
 	// regiven on respawn and removed on death
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="GAS|Abilities")
-	TSubclassOf<class UGGameplayAbility> CharacterAbilities;
+	TArray<TSubclassOf<class UGGameplayAbility>> CharacterAbilities;
 
-	// These effects only apply on startup
+	// These Effects only apply on startup
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="GAS|Abilities")
-	TSubclassOf<class UGameplayEffect> StartupEffects;
+	TArray<TSubclassOf<class UGameplayEffect>> StartupEffects;
 
 	// Server grants Abilities
 	virtual void AddCharacterAbilities();
