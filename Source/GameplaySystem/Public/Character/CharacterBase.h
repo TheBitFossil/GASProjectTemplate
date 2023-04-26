@@ -23,8 +23,7 @@ public:
 
 	// Implement AbilitySystemInterface
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
-	
-	
+		
 	UFUNCTION(BlueprintCallable, Category ="GAS|Character")
 	virtual bool IsAlive() const;
 

@@ -39,7 +39,6 @@ UCharacterAttributeSetBase* AGPlayerState::GetAttributeSet()
 	return AttributeSetBase;
 }
 
-
 bool AGPlayerState::IsAlive() const
 {
 	// We get this from the AttributeSet
@@ -101,35 +100,52 @@ void AGPlayerState::BeginPlay()
 		MaxManaChangedDelegateHandle	= AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSetBase->GetMaxHealthAttribute()).AddUObject(this, &AGPlayerState::MaxManaChanged);
 
 		CharacterLevelDelegateHandle	= AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSetBase->GetCharacterLevelAttribute()).AddUObject(this, &AGPlayerState::CharacterLevelChanged);
+
+		// Tag change callbacks
+		AbilitySystemComponent->RegisterGameplayTagEvent(FGameplayTag::RequestGameplayTag(FName("State.Debuff.Stun")), EGameplayTagEventType::NewOrRemoved).AddUObject(this, &AGPlayerState::StunTagChanged);
 	}
 }
 
 void AGPlayerState::HealthChanged(const FOnAttributeChangeData& Data)
 {
-	//float Health = Data.NewValue;
+	float Health = Data.NewValue;
 
-	// Update floating StatusBar
-	return;
+	//TODO  Update floating StatusBar
+	UE_LOG(LogTemp, Warning, TEXT("Health was changed."));
 }
 
 void AGPlayerState::MaxHealthChanged(const FOnAttributeChangeData& Data)
 {
-	return;
-
+	UE_LOG(LogTemp, Warning, TEXT("MaxHealth was changed."));
 }
 
 void AGPlayerState::ManaChanged(const FOnAttributeChangeData& Data)
 {
-	return;
-
+	UE_LOG(LogTemp, Warning, TEXT("Mana was changed."));
 }
 
 void AGPlayerState::MaxManaChanged(const FOnAttributeChangeData& Data)
-{	return;
-
+{
+	UE_LOG(LogTemp, Warning, TEXT("MaxMana was changed."));
 }
 
 void AGPlayerState::CharacterLevelChanged(const FOnAttributeChangeData& Data)
-{	return;
+{
+	UE_LOG(LogTemp, Warning, TEXT("CharacterLevel was changed."));
+}
 
+void AGPlayerState::StunTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
+{
+	if(NewCount > 0)
+	{
+		// The container holds the Abilities we are adding. a wrapper to help deal with data
+		FGameplayTagContainer AbilityTagsToCancel;
+		AbilityTagsToCancel.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability")));
+
+		FGameplayTagContainer AbilityTagsToIgnore;
+		AbilityTagsToIgnore.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability.NotCanceledByStun")));
+
+		// Action with the filled containers
+		AbilitySystemComponent->CancelAbilities(&AbilityTagsToCancel, &AbilityTagsToIgnore);
+	}
 }

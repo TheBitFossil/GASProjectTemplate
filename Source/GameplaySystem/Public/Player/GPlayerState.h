@@ -74,4 +74,6 @@ protected:
 	virtual void MaxManaChanged(const FOnAttributeChangeData& Data);
 	virtual void CharacterLevelChanged(const FOnAttributeChangeData& Data);
 
+	// Tag change callbacks
+	virtual void StunTagChanged(const FGameplayTag CallbackTag, int32 NewCount);
 };
