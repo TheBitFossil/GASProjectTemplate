@@ -39,14 +39,14 @@ void AGPlayerController::CreateHUD()
 
 	// Set Attributes
 	HUDWidget->SetCurrentHealth(PlayerState->GetHealth());
-	HUDWidget->SetCurrentMaxHealth(PlayerState->GetMaxHealth());
+	HUDWidget->SetMaxHealth(PlayerState->GetMaxHealth());
 	HUDWidget->SetCurrentMana(PlayerState->GetMana());
-	HUDWidget->SetCurrentMaxMana(PlayerState->GetMaxMana());
+	HUDWidget->SetMaxMana(PlayerState->GetMaxMana());
 	HUDWidget->SetCurrentCharacterLevel(PlayerState->GetCharacterLevel());
 	
 }
 
-UGUserWidget* AGPlayerController::GetHud()
+UGUserWidget* AGPlayerController::GetHUD()
 {
 	return HUDWidget;
 }
@@ -66,4 +66,7 @@ void AGPlayerController::OnPossess(APawn* InPawn)
 void AGPlayerController::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
+
+	// Safety Net: when state is replicated before the hero is possessed
+	CreateHUD();
 }

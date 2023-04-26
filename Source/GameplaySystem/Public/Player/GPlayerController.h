@@ -17,15 +17,14 @@ class GAMEPLAYSYSTEM_API AGPlayerController : public APlayerController
 public:
 	void CreateHUD();
 
-	class UGUserWidget* GetHud();
+	class UGUserWidget* GetHUD();
 
 protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="GAS|UI")
 	TSubclassOf<class UGUserWidget> HUDWidgetClass;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="GAS|UI")
+	UPROPERTY(BlueprintReadWrite, Category="GAS|UI")
 	class UGUserWidget* HUDWidget;
-
 
 	// Server only
 	virtual void OnPossess(APawn* InPawn) override;

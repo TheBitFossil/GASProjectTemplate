@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "Player/GPlayerState.h"
 #include "GUserWidget.generated.h"
 
 /**
@@ -18,9 +17,21 @@ class GAMEPLAYSYSTEM_API UGUserWidget : public UUserWidget
 public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void ShowAbilityConfirmCancelText(bool Message);
+
+
+	/**	 Attribute Setters	**/
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void SetCurrentHealth(float GetHealth);
-	void SetCurrentMaxHealth(float GetMaxHealth);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void SetMaxHealth(float GetMaxHealth);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void SetCurrentMana(float GetMana);
-	void SetCurrentMaxMana(float GetMaxMana);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void SetMaxMana(float GetMaxMana);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void SetCurrentCharacterLevel(int32 INT32);
 };
