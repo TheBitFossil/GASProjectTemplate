@@ -21,7 +21,7 @@ public:
 	// Implement AbilitySystemInterface
 	virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
-	class UCharacterAttributeSetBase* GetAttributeSet();
+	class UCharacterAttributeSetBase* GetAttributeSetBase() const;
 
 	UFUNCTION(BlueprintCallable, Category="GAS|PlayerState")
 	bool IsAlive() const;

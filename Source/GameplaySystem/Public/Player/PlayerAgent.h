@@ -36,8 +36,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="GAS|Camera")
 	FVector GetStartingBoomLocation();
-
-	
 	
 protected:
 	// Gets called when the GAme starts or on spawn

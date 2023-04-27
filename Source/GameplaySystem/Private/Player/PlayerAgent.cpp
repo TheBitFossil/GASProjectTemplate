@@ -11,7 +11,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Player/GPlayerState.h"
 
-APlayerAgent::APlayerAgent(const FObjectInitializer& ObjectInitializer)
+APlayerAgent::APlayerAgent(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(FName("Camera Boom"));
 	CameraBoom->SetupAttachment(RootComponent);
@@ -60,13 +60,15 @@ void APlayerAgent::PossessedBy(AController* NewController)
 	if(PState)
 	{
 		// Get the ASC from our PlayerState
+		
+		
 		AbilitySystemComponent = Cast<UCharacterAbilitySystemComponent>(PState->GetAbilitySystemComponent());
 		// Init the ASC from our PlayerState
 		PState->GetAbilitySystemComponent()->InitAbilityActorInfo(PState,this);
 
 		// Get the AttributeSet from our PlayerState
-		AttributeSetBase = PState->GetAttributeSet();
-
+		AttributeSetBase = PState->GetAttributeSetBase();
+		
 		// TODO: Check the dependencies between State, Base, Controller , etc and make a visual graph
 		// Init from our CharacterBase
 		InitAttributes();
@@ -78,6 +80,7 @@ void APlayerAgent::PossessedBy(AController* NewController)
 		/** End of Respawning **/
 
 		/**	UI **/
+		//TODO: UI
 		
 	}
 }
@@ -85,7 +88,7 @@ void APlayerAgent::PossessedBy(AController* NewController)
 void APlayerAgent::FinishDeath()
 {
 	Super::FinishDeath();
-	// TODO
+	// TODO: Finish Death
 }
 
 USpringArmComponent* APlayerAgent::GetCameraBoom()
@@ -108,6 +111,11 @@ FVector APlayerAgent::GetStartingBoomLocation()
 	return StartingBoomLocation;
 }
 
+/** From Documentation:
+* On the Server, Possession happens before BeginPlay.
+* On the Client, BeginPlay happens before Possession.
+* So we can't use BeginPlay to do anything with the AbilitySystemComponent because we don't have it until the PlayerState replicates from possession.
+*/
 void APlayerAgent::BeginPlay()
 {
 	Super::BeginPlay();
@@ -120,6 +128,7 @@ void APlayerAgent::BeginPlay()
 void APlayerAgent::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
+	// TODO: Gun here
 }
 
 void APlayerAgent::LookUp(float Value)
@@ -170,9 +179,35 @@ void APlayerAgent::TurnRate(float Value)
 void APlayerAgent::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
+
+	APlayerState* PState = GetPlayerState<APlayerState>();
+	if(PState)
+	{
+		
+	}
+
+	
+	
 }
 
 void APlayerAgent::BindASCInput()
 {
-	
+	// Template to bind input and ASC from Documentation
+	if(false == ASCInputBound && AbilitySystemComponent.IsValid() && IsValid(InputComponent))
+	{
+		FTopLevelAssetPath AbilityEnumAssetPath = FTopLevelAssetPath(FName("/Script/GameplaySystem"), FName("GameplayAbilityID"));
+		AbilitySystemComponent->BindAbilityActivationToInputComponent(InputComponent
+			,FGameplayAbilityInputBinds
+			(
+				FString("ConfirmTarget")
+				,FString("CancelTarget")
+				,AbilityEnumAssetPath
+				,static_cast<int32>(GameplayAbilityID::Confirm)
+				,static_cast<int32>(GameplayAbilityID::Cancel)
+			)
+		);
+
+		// Check flag that the input is now ready
+		ASCInputBound = true;
+	}
 }

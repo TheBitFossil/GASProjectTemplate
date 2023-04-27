@@ -34,7 +34,7 @@ UAbilitySystemComponent* AGPlayerState::GetAbilitySystemComponent() const
 	return AbilitySystemComponent;
 }
 
-UCharacterAttributeSetBase* AGPlayerState::GetAttributeSet()
+UCharacterAttributeSetBase* AGPlayerState::GetAttributeSetBase() const
 {
 	return AttributeSetBase;
 }
@@ -148,4 +148,5 @@ void AGPlayerState::StunTagChanged(const FGameplayTag CallbackTag, int32 NewCoun
 		// Action with the filled containers
 		AbilitySystemComponent->CancelAbilities(&AbilityTagsToCancel, &AbilityTagsToIgnore);
 	}
+
 }
