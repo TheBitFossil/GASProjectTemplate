@@ -132,8 +132,7 @@ void ACharacterBase::FinishDeath()
 float ACharacterBase::GetHealth() const
 {
 	// Health value is stored inside the AttributeSetBase
-	//if(AttributeSetBase.IsValid())
-	if(AttributeSetBase != nullptr)
+	if(AttributeSetBase.IsValid())
 	{
 		return AttributeSetBase->GetHealth();
 	}
@@ -143,8 +142,7 @@ float ACharacterBase::GetHealth() const
 
 float ACharacterBase::GetMaxHealth() const
 {
-	//if(AttributeSetBase.IsValid())
-	if(AttributeSetBase != nullptr)
+	if(AttributeSetBase.IsValid())
 	{
 		return AttributeSetBase->GetMaxHealth();
 	}
@@ -153,8 +151,7 @@ float ACharacterBase::GetMaxHealth() const
 
 float ACharacterBase::GetMana() const
 {
-	//if(AttributeSetBase.IsValid())
-	if(AttributeSetBase != nullptr)
+	if(AttributeSetBase.IsValid())
 	{
 		return AttributeSetBase->GetMana();
 	}
@@ -163,8 +160,7 @@ float ACharacterBase::GetMana() const
 
 float ACharacterBase::GetMaxMana() const
 {
-	//if(AttributeSetBase.IsValid())
-	if(AttributeSetBase != nullptr)
+	if(AttributeSetBase.IsValid())
 	{
 		return AttributeSetBase->GetMaxMana();
 	}
@@ -176,11 +172,6 @@ void ACharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
-}
-
-UCharacterAttributeSetBase* ACharacterBase::GetAttributeSet() const
-{
-	return AttributeSetBase;
 }
 
 void ACharacterBase::AddCharacterAbilities()
@@ -284,8 +275,7 @@ void ACharacterBase::AddStartupEffects()
 
 void ACharacterBase::SetHealth(float NewHealth)
 {
-	//if(AttributeSetBase.IsValid())
-	if(AttributeSetBase != nullptr)
+	if(AttributeSetBase.IsValid())
 	{
 		AttributeSetBase->SetHealth(NewHealth);
 	}
@@ -293,8 +283,7 @@ void ACharacterBase::SetHealth(float NewHealth)
 
 void ACharacterBase::SetMana(float NewMana)
 {
-	//if(AttributeSetBase.IsValid())
-	if(AttributeSetBase != nullptr)
+	if(AttributeSetBase.IsValid())
 	{
 		AttributeSetBase->SetMana(NewMana);
 	}

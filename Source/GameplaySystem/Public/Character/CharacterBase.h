@@ -67,16 +67,9 @@ protected:
 
 	/** Interface Object needs to be created before we can make a call to it **/
 
-	// But we are using a soft reference for it. The real components are on the PlayerState
+	// using a soft reference for it. The real components are on the PlayerState
 	TWeakObjectPtr<class UCharacterAbilitySystemComponent> AbilitySystemComponent;
-	
-	// Same for the AttributeSet
-	// Instead of using a TWeakPtr, we are using a normal UPROPERTY()
-	//TWeakObjectPtr<class UCharacterAttributeSetBase> AttributeSetBase;
-	UPROPERTY()
-	UCharacterAttributeSetBase* AttributeSetBase;
-
-	virtual UCharacterAttributeSetBase* GetAttributeSet() const;
+	TWeakObjectPtr<class UCharacterAttributeSetBase> AttributeSetBase;
 	
 	// Gameplay Tags
 	FGameplayTag DeathTag;

@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Player/PlayerAgent.h"
 
 #include "AI/PlayerAIController.h"
@@ -9,7 +8,6 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "Player/GPlayerController.h"
 #include "Player/GPlayerState.h"
 
 APlayerAgent::APlayerAgent(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
@@ -61,8 +59,6 @@ void APlayerAgent::PossessedBy(AController* NewController)
 	if(PState)
 	{
 		// Get the ASC from our PlayerState
-		
-		
 		AbilitySystemComponent = Cast<UCharacterAbilitySystemComponent>(PState->GetAbilitySystemComponent());
 		// Init the ASC from our PlayerState
 		PState->GetAbilitySystemComponent()->InitAbilityActorInfo(PState,this);
