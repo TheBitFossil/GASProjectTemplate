@@ -4,6 +4,7 @@
 #include "Character/Abilities/AttributeSets/CharacterAttributeSetBase.h"
 #include "Net/UnrealNetwork.h"
 
+
 UCharacterAttributeSetBase::UCharacterAttributeSetBase()
 {
 }

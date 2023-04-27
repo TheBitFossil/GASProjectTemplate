@@ -9,6 +9,7 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Player/GPlayerController.h"
 #include "Player/GPlayerState.h"
 
 APlayerAgent::APlayerAgent(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
@@ -176,18 +177,44 @@ void APlayerAgent::TurnRate(float Value)
 	AddControllerYawInput(Value * BaseTurnRate * GetWorld()->DeltaTimeSeconds);
 }
 
+// Client Only
 void APlayerAgent::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
 
-	APlayerState* PState = GetPlayerState<APlayerState>();
+	AGPlayerState* PState = GetPlayerState<AGPlayerState>();
 	if(PState)
 	{
-		
-	}
+		// Init ASC for Clients. Server does this in PossessedBy
+		AbilitySystemComponent = Cast<UCharacterAbilitySystemComponent>(PState->GetAbilitySystemComponent());
 
-	
-	
+		// Init ASC Actor Infor for CLients. Server will init in Possess for a new Actor
+		AbilitySystemComponent->InitAbilityActorInfo(PState, this);
+
+		// Input Binds also called SetupPlayerInputComponent. Race Condition safety
+		BindASCInput();
+
+		// AttributeSetBase
+		AttributeSetBase = PState->GetAttributeSetBase();
+
+		// TODO change this is respawning should not reset all Attributes
+		InitAttributes();
+
+		/*// We can get the PlayerController from internal Function. Only need to Cast to our Type
+		AGPlayerController* PController = Cast<AGPlayerController>(GetController());
+		if(PController)
+		{
+			TODO: CreateHUD();
+		}*/
+
+
+		// GameplayTags
+		AbilitySystemComponent->SetTagMapCount(DeadTag,0);
+
+		// On Respawn, we are initializing our Values to Max
+		SetHealth(GetMaxHealth());
+		SetMana(GetMaxMana());
+	}
 }
 
 void APlayerAgent::BindASCInput()
