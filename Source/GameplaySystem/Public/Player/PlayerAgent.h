@@ -35,7 +35,7 @@ public:
 	float GetStartingBoomLength();
 
 	UFUNCTION(BlueprintCallable, Category="GAS|Camera")
-	FVector GetStartingBoomLocation;
+	FVector GetStartingBoomLocation();
 
 	
 	
