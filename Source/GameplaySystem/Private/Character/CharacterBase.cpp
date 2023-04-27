@@ -132,7 +132,8 @@ void ACharacterBase::FinishDeath()
 float ACharacterBase::GetHealth() const
 {
 	// Health value is stored inside the AttributeSetBase
-	if(AttributeSetBase.IsValid())
+	//if(AttributeSetBase.IsValid())
+	if(AttributeSetBase != nullptr)
 	{
 		return AttributeSetBase->GetHealth();
 	}
@@ -142,7 +143,8 @@ float ACharacterBase::GetHealth() const
 
 float ACharacterBase::GetMaxHealth() const
 {
-	if(AttributeSetBase.IsValid())
+	//if(AttributeSetBase.IsValid())
+	if(AttributeSetBase != nullptr)
 	{
 		return AttributeSetBase->GetMaxHealth();
 	}
@@ -151,7 +153,8 @@ float ACharacterBase::GetMaxHealth() const
 
 float ACharacterBase::GetMana() const
 {
-	if(AttributeSetBase.IsValid())
+	//if(AttributeSetBase.IsValid())
+	if(AttributeSetBase != nullptr)
 	{
 		return AttributeSetBase->GetMana();
 	}
@@ -160,7 +163,8 @@ float ACharacterBase::GetMana() const
 
 float ACharacterBase::GetMaxMana() const
 {
-	if(AttributeSetBase.IsValid())
+	//if(AttributeSetBase.IsValid())
+	if(AttributeSetBase != nullptr)
 	{
 		return AttributeSetBase->GetMaxMana();
 	}
@@ -174,9 +178,14 @@ void ACharacterBase::BeginPlay()
 	
 }
 
+UCharacterAttributeSetBase* ACharacterBase::GetAttributeSet() const
+{
+	return AttributeSetBase;
+}
+
 void ACharacterBase::AddCharacterAbilities()
 {
-	// The ASC and Server will grant us, if we don't have them already
+	// Only on the Server: ASC is granting us Abilities, if we don't have them already
 	if(GetLocalRole() != ROLE_Authority
 		|| false == AbilitySystemComponent.IsValid()
 		|| AbilitySystemComponent->bCharacterAbilitiesGiven)
@@ -275,7 +284,8 @@ void ACharacterBase::AddStartupEffects()
 
 void ACharacterBase::SetHealth(float NewHealth)
 {
-	if(AttributeSetBase.IsValid())
+	//if(AttributeSetBase.IsValid())
+	if(AttributeSetBase != nullptr)
 	{
 		AttributeSetBase->SetHealth(NewHealth);
 	}
@@ -283,7 +293,8 @@ void ACharacterBase::SetHealth(float NewHealth)
 
 void ACharacterBase::SetMana(float NewMana)
 {
-	if(AttributeSetBase.IsValid())
+	//if(AttributeSetBase.IsValid())
+	if(AttributeSetBase != nullptr)
 	{
 		AttributeSetBase->SetMana(NewMana);
 	}

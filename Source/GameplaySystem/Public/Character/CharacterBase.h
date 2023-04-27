@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
 #include "GameplayTagContainer.h"
+#include "Abilities/AttributeSets/CharacterAttributeSetBase.h"
 #include "GameplaySystem/GameplaySystem.h"
 #include "CharacterBase.generated.h"
 
@@ -64,12 +65,19 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	// Interface Object needs to be created before we can make a call to it
+	/** Interface Object needs to be created before we can make a call to it **/
+
 	// But we are using a soft reference for it. The real components are on the PlayerState
 	TWeakObjectPtr<class UCharacterAbilitySystemComponent> AbilitySystemComponent;
+	
 	// Same for the AttributeSet
-	TWeakObjectPtr<class UCharacterAttributeSetBase> AttributeSetBase;
+	// Instead of using a TWeakPtr, we are using a normal UPROPERTY()
+	//TWeakObjectPtr<class UCharacterAttributeSetBase> AttributeSetBase;
+	UPROPERTY()
+	UCharacterAttributeSetBase* AttributeSetBase;
 
+	virtual UCharacterAttributeSetBase* GetAttributeSet() const;
+	
 	// Gameplay Tags
 	FGameplayTag DeathTag;
 	FGameplayTag EffectRemoveOnDeathTag;
@@ -102,7 +110,7 @@ protected:
 
 	// Here we are adding the Effects to our Character
 	virtual void AddStartupEffects();
-	
+
 	// Setters for our AttributeSet
 	virtual void SetHealth(float NewHealth);
 	virtual void SetMana(float NewMana);
