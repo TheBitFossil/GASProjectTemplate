@@ -171,7 +171,6 @@ float ACharacterBase::GetMaxMana() const
 void ACharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 void ACharacterBase::AddCharacterAbilities()
