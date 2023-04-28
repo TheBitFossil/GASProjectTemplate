@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "InputActionValue.h"
 #include "Character/CharacterBase.h"
 #include "PlayerAgent.generated.h"
 
@@ -18,9 +19,6 @@ public:
 	// Setup theC-Tor with extra functionality. ObjInit is a helper for that
 	APlayerAgent(const class FObjectInitializer& ObjectInitializer);
 
-	// We want to bind Input, to actually move our player
-	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
-
 	// Calling from our PlayerController
 	virtual void PossessedBy(AController* NewController) override;
 
@@ -28,8 +26,10 @@ public:
 	virtual void FinishDeath() override;
 
 	/**	Camera Setup **/
-	class USpringArmComponent* GetCameraBoom();
-	class UCameraComponent* GetFollowCamera();
+	// Returns CameraBoom subobject
+	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+	// Returns FollowCamera subobject
+	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 	UFUNCTION(BlueprintCallable, Category="GAS|Camera")
 	float GetStartingBoomLength();
@@ -38,6 +38,9 @@ public:
 	FVector GetStartingBoomLocation();
 	
 protected:
+	// We want to bind Input, to actually move our player
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
 	// Gets called when the GAme starts or on spawn
 	virtual void BeginPlay() override;
 
@@ -67,12 +70,30 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category="GAS|Camera")
 	FVector StartingBoomLocation;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere,Category="GAS|Camera")
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="GAS|Camera")
 	class USpringArmComponent* CameraBoom;
 	
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere,Category="GAS|Camera")
 	class UCameraComponent* FollowCamera;
 
+	/** New InputSystem**/
+	
+	/*// Default Mapping Context for new InputSystem
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="GAS|Input")
+	class UInputMappingContext* DefaultInputMappingContext;
+
+	// Move Action Input
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="GAS|Input")
+	class UInputAction* MoveAction;
+
+	// Look Input Action
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="GAS|Input")
+	class UInputAction* LookAction;
+
+	void MoveInput(const FInputActionValue& Value);
+	void LookInput(const FInputActionValue& Value);*/
+
+	
 	/**	ASC **/
 	bool ASCInputBound = false;
 	FGameplayTag DeadTag;

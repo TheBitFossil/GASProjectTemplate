@@ -3,10 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
+#include "GameplayEffect.h"
 #include "GameplayTagContainer.h"
 #include "Abilities/AttributeSets/CharacterAttributeSetBase.h"
+#include "GameFramework/Character.h"
 #include "GameplaySystem/GameplaySystem.h"
 #include "CharacterBase.generated.h"
 

@@ -4,25 +4,48 @@
 
 #include "AI/PlayerAIController.h"
 #include "Camera/CameraComponent.h"
+#include "Character/Abilities/AttributeSets/CharacterAttributeSetBase.h"
 #include "Character/Abilities/CharacterAbilitySystemComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Player/GPlayerController.h"
 #include "Player/GPlayerState.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 APlayerAgent::APlayerAgent(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
-	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(FName("Camera Boom"));
+	/** Camera Setup **/
+	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(FName("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
+	CameraBoom->TargetArmLength = 500.f;
+	CameraBoom->SetRelativeLocation((FVector(0,0,75)));
+	StartingBoomLength = CameraBoom->TargetArmLength;
+	StartingBoomLocation = CameraBoom->GetRelativeLocation();
+	// Does the Boom rotate relative to the Controller ?
 	CameraBoom->bUsePawnControlRotation = true;
-	CameraBoom->SetRelativeLocation((FVector(0,0, 70)));
 
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(FName("FollowCamera"));
-	FollowCamera->SetupAttachment(CameraBoom);
-	FollowCamera->SetFieldOfView(80);
+	// Attach the Camera to the end of the Camera Boom
+	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
+	FollowCamera->SetFieldOfView(85);
+	// Does the Camera rotate relative to Boom ?
+	FollowCamera->bUsePawnControlRotation = false;
 
+
+	/** Capsule Collision **/
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+	GetCapsuleComponent()->InitCapsuleSize(55.f, 100.f);
 
+	/*// Rotation only for the Camera
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationRoll = false;
+	bUseControllerRotationYaw = false;*/
+
+	/** Character Movement **/
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->RotationRate = FRotator(0.f, 500.0f, 0.f);
+	
 	/** Animations play on the Server to use bone and socket transforms ( spawning projectiles and fx )	**/
 	GetMesh()->VisibilityBasedAnimTickOption = EVisibilityBasedAnimTickOption::AlwaysTickPoseAndRefreshBones;
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
@@ -47,6 +70,19 @@ void APlayerAgent::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAxis("LookUpRate", this, &APlayerAgent::LookUpRate);
 	PlayerInputComponent->BindAxis("TurnRate", this, &APlayerAgent::TurnRate);
 
+	/**	New Inputsystem **/
+	/*
+	if(UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
+	{
+		// Moving
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APlayerAgent::MoveInput);
+
+		// Looking
+		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APlayerAgent::LookInput);
+	}
+	*/
+
+	
 	// Bind ASC and Player Input : OnRep_PlayerState
 	BindASCInput();
 }
@@ -58,9 +94,10 @@ void APlayerAgent::PossessedBy(AController* NewController)
 	AGPlayerState* PState = GetPlayerState<AGPlayerState>();
 	if(PState)
 	{
-		// Get the ASC from our PlayerState
+		// Set the ASC on the Server. Client does this from OnRep_PlayerState()
 		AbilitySystemComponent = Cast<UCharacterAbilitySystemComponent>(PState->GetAbilitySystemComponent());
-		// Init the ASC from our PlayerState
+
+		// Init the ASC from our PlayerState. For the AI
 		PState->GetAbilitySystemComponent()->InitAbilityActorInfo(PState,this);
 
 		// Get the AttributeSet from our PlayerState
@@ -69,16 +106,20 @@ void APlayerAgent::PossessedBy(AController* NewController)
 		// TODO: Check the dependencies between State, Base, Controller , etc and make a visual graph
 		// Init from our CharacterBase
 		InitAttributes();
-		AddStartupEffects();
-		AddCharacterAbilities();
 
+		// Set DeadTag to 0.
+		AbilitySystemComponent->SetTagMapCount(DeadTag, 0);
+		
 		/** Respawning	**/
-
+		SetHealth(GetMaxHealth());
+		SetMana(GetMaxMana());
 		/** End of Respawning **/
 
+		AddStartupEffects();
+		AddCharacterAbilities();
+		
 		/**	UI **/
 		//TODO: UI
-		
 	}
 }
 
@@ -86,16 +127,6 @@ void APlayerAgent::FinishDeath()
 {
 	Super::FinishDeath();
 	// TODO: Finish Death
-}
-
-USpringArmComponent* APlayerAgent::GetCameraBoom()
-{
-	return CameraBoom;
-}
-
-UCameraComponent* APlayerAgent::GetFollowCamera()
-{
-	return FollowCamera;
 }
 
 float APlayerAgent::GetStartingBoomLength()
@@ -117,9 +148,17 @@ void APlayerAgent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// Init Camera
-	StartingBoomLength = CameraBoom->TargetArmLength;
-	StartingBoomLocation = CameraBoom->GetRelativeLocation();
+	/*// Init the Input Mapping Context
+	if(AGPlayerController* PlayerController = Cast<AGPlayerController>(Controller))
+	{
+		if(UEnhancedInputLocalPlayerSubsystem* Subsystem
+			= ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+		{
+			Subsystem->AddMappingContext(DefaultInputMappingContext, 0);
+		}
+	}*/
+	
+
 }
 
 void APlayerAgent::PostInitializeComponents()
@@ -149,6 +188,11 @@ void APlayerAgent::MoveForward(float Value)
 	if(IsAlive())
 	{
 		AddMovementInput(UKismetMathLibrary::GetForwardVector(FRotator(0, GetControlRotation().Yaw, 0)), Value);
+		UE_LOG(LogTemp, Warning, TEXT("We are moving forward!"));
+	}
+	if(!IsAlive())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("We are dead!"));
 	}
 }
 
@@ -170,8 +214,42 @@ void APlayerAgent::LookUpRate(float Value)
 
 void APlayerAgent::TurnRate(float Value)
 {
-	AddControllerYawInput(Value * BaseTurnRate * GetWorld()->DeltaTimeSeconds);
+	if(IsAlive())
+	{
+		AddControllerYawInput(Value * BaseTurnRate * GetWorld()->DeltaTimeSeconds);
+	}
 }
+
+/*void APlayerAgent::MoveInput(const FInputActionValue& Value)
+{
+	FVector2D MovementVector = Value.Get<FVector2D>();
+
+	if(Controller != nullptr)
+	{
+		const FRotator Rotation = Controller->GetControlRotation();
+		const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+		// Forward Vector
+		const FVector FwdVec = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+
+		// Right Vector
+		const FVector RVec = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+
+		AddMovementInput(FwdVec *MovementVector.Y);
+		AddMovementInput(RVec *MovementVector.X);
+	}
+}
+
+void APlayerAgent::LookInput(const FInputActionValue& Value)
+{
+	FVector2D LookAxisVector = Value.Get<FVector2D>();
+
+	if(Controller != nullptr)
+	{
+		AddControllerYawInput(LookAxisVector.X);
+		AddControllerPitchInput(LookAxisVector.Y);
+	}
+}*/
 
 // Client Only
 void APlayerAgent::OnRep_PlayerState()
@@ -181,7 +259,7 @@ void APlayerAgent::OnRep_PlayerState()
 	AGPlayerState* PState = GetPlayerState<AGPlayerState>();
 	if(PState)
 	{
-		// Init ASC for Clients. Server does this in PossessedBy
+		// Init ASC for Clients. Server does this in PossessedBy()
 		AbilitySystemComponent = Cast<UCharacterAbilitySystemComponent>(PState->GetAbilitySystemComponent());
 
 		// Init ASC Actor Infor for CLients. Server will init in Possess for a new Actor
@@ -202,7 +280,6 @@ void APlayerAgent::OnRep_PlayerState()
 		{
 			TODO: CreateHUD();
 		}*/
-
 
 		// GameplayTags
 		AbilitySystemComponent->SetTagMapCount(DeadTag,0);
