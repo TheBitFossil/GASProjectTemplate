@@ -222,37 +222,6 @@ void APlayerAgent::TurnRate(float Value)
 	}
 }
 
-/*void APlayerAgent::MoveInput(const FInputActionValue& Value)
-{
-	FVector2D MovementVector = Value.Get<FVector2D>();
-
-	if(Controller != nullptr)
-	{
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-		// Forward Vector
-		const FVector FwdVec = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-
-		// Right Vector
-		const FVector RVec = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-
-		AddMovementInput(FwdVec *MovementVector.Y);
-		AddMovementInput(RVec *MovementVector.X);
-	}
-}
-
-void APlayerAgent::LookInput(const FInputActionValue& Value)
-{
-	FVector2D LookAxisVector = Value.Get<FVector2D>();
-
-	if(Controller != nullptr)
-	{
-		AddControllerYawInput(LookAxisVector.X);
-		AddControllerPitchInput(LookAxisVector.Y);
-	}
-}*/
-
 // Client Only
 void APlayerAgent::OnRep_PlayerState()
 {
