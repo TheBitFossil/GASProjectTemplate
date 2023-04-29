@@ -22,6 +22,9 @@ void UCharacterAttributeSetBase::GetLifetimeReplicatedProps(TArray<FLifetimeProp
 	DOREPLIFETIME_CONDITION_NOTIFY(UCharacterAttributeSetBase, MaxMana, COND_None, REPNOTIFY_Always);
 
 	DOREPLIFETIME_CONDITION_NOTIFY(UCharacterAttributeSetBase, CharacterLevel, COND_None, REPNOTIFY_Always);
+
+	DOREPLIFETIME_CONDITION_NOTIFY(UCharacterAttributeSetBase, MoveSpeed, COND_None, REPNOTIFY_Always);
+	
 }
 
 void UCharacterAttributeSetBase::OnRep_Health(const FGameplayAttributeData& OldHealth)
@@ -47,5 +50,10 @@ void UCharacterAttributeSetBase::OnRep_MaxMana(const FGameplayAttributeData& Old
 void UCharacterAttributeSetBase::OnRep_CharacterLevel(const FGameplayAttributeData& OldCharacterLevel)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UCharacterAttributeSetBase, CharacterLevel, OldCharacterLevel);
+}
+
+void UCharacterAttributeSetBase::OnRep_MoveSpeed(const FGameplayAttributeData& OldMoveSpeed)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UCharacterAttributeSetBase, MoveSpeed, OldMoveSpeed);
 }
 

@@ -55,6 +55,13 @@ public:
 	FGameplayAttributeData Damage;
 	ATTRIBUTE_ACCESSORS(UCharacterAttributeSetBase, Damage);
 
+
+	/**	Sprint Ability **/
+	UPROPERTY(BlueprintReadOnly, Category ="Movement", ReplicatedUsing =OnRep_MoveSpeed)
+	FGameplayAttributeData MoveSpeed;
+	ATTRIBUTE_ACCESSORS(UCharacterAttributeSetBase,MoveSpeed);
+
+	
 	
 protected:
 	UFUNCTION()
@@ -71,5 +78,8 @@ protected:
 
 	UFUNCTION()
 	virtual void OnRep_CharacterLevel(const FGameplayAttributeData& OldCharacterLevel);
+
+	UFUNCTION()
+	virtual void OnRep_MoveSpeed(const FGameplayAttributeData& OldMoveSpeed);
 	
 };
