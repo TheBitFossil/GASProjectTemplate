@@ -185,8 +185,8 @@ void APlayerAgent::Turn(float Value)
 
 void APlayerAgent::MoveForward(float Value)
 {
-	const FString msg = FString::Printf(TEXT("Bool Status: %f"), GetHealth());
-	GEngine->AddOnScreenDebugMessage(-1, .5f, FColor::Red, *msg, true);
+	/*const FString msg = FString::Printf(TEXT("Bool Status: %f"), GetHealth());
+	GEngine->AddOnScreenDebugMessage(-1, .5f, FColor::Red, *msg, true);*/
 
 	if(IsAlive())
 	{
