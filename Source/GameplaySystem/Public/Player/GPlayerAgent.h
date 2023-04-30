@@ -3,20 +3,20 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Character/CharacterBase.h"
-#include "PlayerAgent.generated.h"
+#include "Character/GCharacterBase.h"
+#include "GPlayerAgent.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class GAMEPLAYSYSTEM_API APlayerAgent : public ACharacterBase
+class GAMEPLAYSYSTEM_API AGPlayerAgent : public ACharacterBase
 {
 	GENERATED_BODY()
 
 public:
 	// Setup theC-Tor with extra functionality. ObjInit is a helper for that
-	APlayerAgent(const class FObjectInitializer& ObjectInitializer);
+	AGPlayerAgent(const class FObjectInitializer& ObjectInitializer);
 
 	// Calling from our PlayerController
 	virtual void PossessedBy(AController* NewController) override;
@@ -75,24 +75,6 @@ protected:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere,Category="GAS|Camera")
 	class UCameraComponent* FollowCamera;
 
-	/** New InputSystem**/
-	
-	/*// Default Mapping Context for new InputSystem
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="GAS|Input")
-	class UInputMappingContext* DefaultInputMappingContext;
-
-	// Move Action Input
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="GAS|Input")
-	class UInputAction* MoveAction;
-
-	// Look Input Action
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="GAS|Input")
-	class UInputAction* LookAction;
-
-	void MoveInput(const FInputActionValue& Value);
-	void LookInput(const FInputActionValue& Value);*/
-
-	
 	/**	ASC **/
 	bool ASCInputBound = false;
 	FGameplayTag DeadTag;

@@ -1,17 +1,17 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Character/CharacterBase.h"
+#include "Character/GCharacterBase.h"
 
+#include "Character/GCharacterMovementComponent.h"
 #include "Character/Abilities/CharacterAbilitySystemComponent.h"
 #include "Character/Abilities/GGameplayAbility.h"
 #include "Character/Abilities/AttributeSets/CharacterAttributeSetBase.h"
 #include "Components/CapsuleComponent.h"
-#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 ACharacterBase::ACharacterBase(const FObjectInitializer& ObjectInitializer) :
-	Super(ObjectInitializer.SetDefaultSubobjectClass<UCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
+	Super(ObjectInitializer.SetDefaultSubobjectClass<UGCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -129,6 +129,14 @@ void ACharacterBase::FinishDeath()
 	Destroy();
 }
 
+/*void ACharacterBase::HandleMoveSpeedChange(float DeltaValue, FGameplayTagContainer AscTags)
+{
+	// Update Character Move & WalkSpeed
+	GetCharacterMovement()->MaxWalkSpeed = GetMoveSpeed();
+
+	// Call a blueprint implementable event
+}*/
+
 float ACharacterBase::GetHealth() const
 {
 	// Health value is stored inside the AttributeSetBase
@@ -163,6 +171,15 @@ float ACharacterBase::GetMaxMana() const
 	if(AttributeSetBase.IsValid())
 	{
 		return AttributeSetBase->GetMaxMana();
+	}
+	return 0.0f;
+}
+
+float ACharacterBase::GetMoveSpeed() const
+{
+	if(AttributeSetBase.IsValid())
+	{
+		return AttributeSetBase->GetMoveSpeed();
 	}
 	return 0.0f;
 }

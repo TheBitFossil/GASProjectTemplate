@@ -9,7 +9,7 @@
 #include "Abilities/AttributeSets/CharacterAttributeSetBase.h"
 #include "GameFramework/Character.h"
 #include "GameplaySystem/GameplaySystem.h"
-#include "CharacterBase.generated.h"
+#include "GCharacterBase.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCharacterDiedDelegate, ACharacterBase*, Character);
 
@@ -44,6 +44,9 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category ="GAS|Character")
 	virtual void FinishDeath();
+	/*
+	void HandleMoveSpeedChange(float DeltaValue, FGameplayTagContainer AscTags);
+	*/
 
 	// Death Event Delegate
 	UPROPERTY(BlueprintAssignable, Category ="GAS|Character")
@@ -61,6 +64,9 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category="GAS|Character|Attributes")
 	float GetMaxMana() const;
+
+	UFUNCTION(BlueprintCallable, Category="GAS|Character|Attributes")
+	float GetMoveSpeed() const;
 
 protected:
 	// Called when the game starts or when spawned
