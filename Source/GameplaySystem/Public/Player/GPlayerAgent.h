@@ -56,6 +56,9 @@ protected:
 	/** Gamepad **/
 	void LookUpRate(float Value);
 	void TurnRate(float Value);
+
+
+	virtual void Jump() override;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="GAS|Camera")
 	float BaseTurnRate = 45.0f;

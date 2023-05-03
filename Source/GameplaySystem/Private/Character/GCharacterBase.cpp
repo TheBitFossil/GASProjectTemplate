@@ -10,8 +10,8 @@
 #include "Components/CapsuleComponent.h"
 
 // Sets default values
-ACharacterBase::ACharacterBase(const FObjectInitializer& ObjectInitializer) :
-	Super(ObjectInitializer.SetDefaultSubobjectClass<UGCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
+ACharacterBase::ACharacterBase(const FObjectInitializer& ObjectInitializer)
+	: Super(ObjectInitializer.SetDefaultSubobjectClass<UCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -129,14 +129,6 @@ void ACharacterBase::FinishDeath()
 	Destroy();
 }
 
-/*void ACharacterBase::HandleMoveSpeedChange(float DeltaValue, FGameplayTagContainer AscTags)
-{
-	// Update Character Move & WalkSpeed
-	GetCharacterMovement()->MaxWalkSpeed = GetMoveSpeed();
-
-	// Call a blueprint implementable event
-}*/
-
 float ACharacterBase::GetHealth() const
 {
 	// Health value is stored inside the AttributeSetBase
@@ -213,7 +205,6 @@ void ACharacterBase::AddCharacterAbilities()
 			)
 		);
 	}
-	
 	// by now we should have granted the default abilities
 	AbilitySystemComponent->bCharacterAbilitiesGiven = true;
 }

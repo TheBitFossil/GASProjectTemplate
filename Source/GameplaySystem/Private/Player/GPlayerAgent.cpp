@@ -12,7 +12,8 @@
 #include "Player/GPlayerState.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
-AGPlayerAgent::AGPlayerAgent(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
+AGPlayerAgent::AGPlayerAgent(const FObjectInitializer& ObjectInitializer)
+: Super(ObjectInitializer)
 {
 	/** Camera Setup **/
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(FName("CameraBoom"));
@@ -177,7 +178,8 @@ void AGPlayerAgent::MoveForward(float Value)
 
 	if(IsAlive())
 	{
-		AddMovementInput(UKismetMathLibrary::GetForwardVector(FRotator(0, GetControlRotation().Yaw, 0)), Value);
+		if(Value != 0.0f)
+			AddMovementInput(UKismetMathLibrary::GetForwardVector(FRotator(0, GetControlRotation().Yaw, 0)), Value);
 	}
 	if(!IsAlive())
 	{
@@ -207,6 +209,11 @@ void AGPlayerAgent::TurnRate(float Value)
 	{
 		AddControllerYawInput(Value * BaseTurnRate * GetWorld()->DeltaTimeSeconds);
 	}
+}
+
+void AGPlayerAgent::Jump()
+{
+	Super::Jump();
 }
 
 // Client Only

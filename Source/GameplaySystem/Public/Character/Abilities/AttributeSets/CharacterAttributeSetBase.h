@@ -31,8 +31,6 @@ public:
 
 	// Overrides to handle PreAbility and PostAbility options
 	// We could clamp values here, or do extra damage calculations
-	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
-	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 	
 	UPROPERTY(BlueprintReadOnly, Category = "Health", ReplicatedUsing = OnRep_Health)
 	FGameplayAttributeData Health;
@@ -59,8 +57,7 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category ="Damage")
 	FGameplayAttributeData Damage;
 	ATTRIBUTE_ACCESSORS(UCharacterAttributeSetBase, Damage);
-
-
+	
 	/**	Sprint Ability **/
 	UPROPERTY(BlueprintReadOnly, Category ="Movement", ReplicatedUsing =OnRep_MoveSpeed)
 	FGameplayAttributeData MoveSpeed;

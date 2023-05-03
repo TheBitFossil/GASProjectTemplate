@@ -44,9 +44,6 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category ="GAS|Character")
 	virtual void FinishDeath();
-	/*
-	void HandleMoveSpeedChange(float DeltaValue, FGameplayTagContainer AscTags);
-	*/
 
 	// Death Event Delegate
 	UPROPERTY(BlueprintAssignable, Category ="GAS|Character")
