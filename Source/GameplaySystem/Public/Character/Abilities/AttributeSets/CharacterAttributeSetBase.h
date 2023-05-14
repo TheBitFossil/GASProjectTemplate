@@ -31,6 +31,7 @@ public:
 
 	// Overrides to handle PreAbility and PostAbility options
 	// We could clamp values here, or do extra damage calculations
+	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	
 	UPROPERTY(BlueprintReadOnly, Category = "Health", ReplicatedUsing = OnRep_Health)
 	FGameplayAttributeData Health;
@@ -51,6 +52,14 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category="Character Level", ReplicatedUsing = OnRep_CharacterLevel)
 	FGameplayAttributeData CharacterLevel;
 	ATTRIBUTE_ACCESSORS(UCharacterAttributeSetBase, CharacterLevel);
+
+	UPROPERTY(BlueprintReadOnly, Category="Character Level", ReplicatedUsing = OnRep_Stamina)
+	FGameplayAttributeData Stamina;
+	ATTRIBUTE_ACCESSORS(UCharacterAttributeSetBase, Stamina);
+
+	UPROPERTY(BlueprintReadOnly, Category="Character Level", ReplicatedUsing = OnRep_MaxStamina)
+	FGameplayAttributeData MaxStamina;
+	ATTRIBUTE_ACCESSORS(UCharacterAttributeSetBase, MaxStamina);
 	
 	// Cached Damage value, to better calculate total damage from all possible AbilitySources
 	// Only exist on the server
@@ -63,6 +72,7 @@ public:
 	FGameplayAttributeData MoveSpeed;
 	ATTRIBUTE_ACCESSORS(UCharacterAttributeSetBase,MoveSpeed);
 
+	
 protected:
 	UFUNCTION()
 	virtual void OnRep_Health(const FGameplayAttributeData& OldHealth);
@@ -81,5 +91,11 @@ protected:
 
 	UFUNCTION()
 	virtual void OnRep_MoveSpeed(const FGameplayAttributeData& OldMoveSpeed);
+
+	UFUNCTION()
+	virtual void OnRep_Stamina(const FGameplayAttributeData& OldStamina);
+	
+	UFUNCTION()
+	virtual void OnRep_MaxStamina(const FGameplayAttributeData& OldMaxStamina);
 	
 };
