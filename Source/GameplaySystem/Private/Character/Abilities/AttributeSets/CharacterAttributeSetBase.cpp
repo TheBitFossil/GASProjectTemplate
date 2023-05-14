@@ -42,6 +42,20 @@ void UCharacterAttributeSetBase::PreAttributeChange(const FGameplayAttribute& At
 		NewValue = FMath::Clamp<float>(NewValue, 0, MaxHealth.GetBaseValue());
 		UE_LOG(LogTemp, Error, TEXT("Health: %f and MaxHealth: %f"), Health.GetCurrentValue(), MaxHealth.GetBaseValue());
 	}
+	if(Attribute == GetManaAttribute())
+	{
+		NewValue = FMath::Clamp<float>(NewValue,0, MaxMana.GetBaseValue());
+	}
+	if(Attribute == GetStaminaAttribute())
+	{
+		NewValue = FMath::Clamp<float>(NewValue, 0, MaxStamina.GetBaseValue());
+	}
+}
+
+void UCharacterAttributeSetBase::PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue,
+	float NewValue)
+{
+	Super::PostAttributeChange(Attribute, OldValue, NewValue);
 }
 
 

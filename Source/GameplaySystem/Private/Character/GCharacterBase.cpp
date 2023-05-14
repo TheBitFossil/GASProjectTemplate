@@ -176,6 +176,24 @@ float ACharacterBase::GetMoveSpeed() const
 	return 0.0f;
 }
 
+float ACharacterBase::GetStamina() const
+{
+	if(AttributeSetBase.IsValid())
+	{
+		return AttributeSetBase->GetStamina();
+	}
+	return 0.0f;
+}
+
+float ACharacterBase::GetMaxStamina() const
+{
+	if(AttributeSetBase.IsValid())
+	{
+		return AttributeSetBase->GetMaxStamina();
+	}
+	return 0.0f;
+}
+
 // Called when the game starts or when spawned
 void ACharacterBase::BeginPlay()
 {
@@ -293,6 +311,14 @@ void ACharacterBase::SetMana(float NewMana)
 	if(AttributeSetBase.IsValid())
 	{
 		AttributeSetBase->SetMana(NewMana);
+	}
+}
+
+void ACharacterBase::SetStamina(float NewStamina)
+{
+	if(AttributeSetBase.IsValid())
+	{
+		AttributeSetBase->SetStamina(NewStamina);
 	}
 }
 

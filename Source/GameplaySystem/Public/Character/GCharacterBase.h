@@ -65,6 +65,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category="GAS|Character|Attributes")
 	float GetMoveSpeed() const;
 
+	UFUNCTION(BlueprintCallable, Category="GAS|Character|Attributes")
+	float GetStamina() const;
+
+	UFUNCTION(BlueprintCallable, Category="GAS|Character|Attributes")
+	float GetMaxStamina() const;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -111,4 +117,5 @@ protected:
 	// Setters for our AttributeSet
 	virtual void SetHealth(float NewHealth);
 	virtual void SetMana(float NewMana);
+	virtual void SetStamina(float NewStamina);
 };
