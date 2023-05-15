@@ -43,6 +43,9 @@ void AGPlayerController::CreateHUD()
 	HUDWidget->SetCurrentMana(PlayerState->GetMana());
 	HUDWidget->SetMaxMana(PlayerState->GetMaxMana());
 	HUDWidget->SetCurrentCharacterLevel(PlayerState->GetCharacterLevel());
+	HUDWidget->SetStamina(PlayerState->GetStamina());
+	HUDWidget->SetMaxStamina(PlayerState->GetMaxStamina());
+	HUDWidget->SetMaxStamina(PlayerState->GetStaminaRegen());
 	
 }
 

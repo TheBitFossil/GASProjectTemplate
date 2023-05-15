@@ -34,4 +34,16 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void SetCurrentCharacterLevel(int32 INT32);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void SetStamina(float GetStamina);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void SetMaxStamina(float GetMaxStamina);
+	
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void SetStaminaRegen(float GetStaminaRegen);
+
+
+	
 };
