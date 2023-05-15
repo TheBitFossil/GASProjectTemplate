@@ -71,6 +71,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category="GAS|Character|Attributes")
 	float GetMaxStamina() const;
 
+	UFUNCTION(BlueprintCallable, Category="GAS|Character|Attribute")
+	float GetMaxStaminaRegen() const;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -118,4 +121,5 @@ protected:
 	virtual void SetHealth(float NewHealth);
 	virtual void SetMana(float NewMana);
 	virtual void SetStamina(float NewStamina);
+	virtual void SetStaminaRegen(float NewStaminaRegen);
 };

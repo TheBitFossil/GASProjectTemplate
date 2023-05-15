@@ -54,13 +54,17 @@ public:
 	FGameplayAttributeData CharacterLevel;
 	ATTRIBUTE_ACCESSORS(UCharacterAttributeSetBase, CharacterLevel);
 
-	UPROPERTY(BlueprintReadOnly, Category="Character Level", ReplicatedUsing = OnRep_Stamina)
+	UPROPERTY(BlueprintReadOnly, Category="Stamina", ReplicatedUsing = OnRep_Stamina)
 	FGameplayAttributeData Stamina;
 	ATTRIBUTE_ACCESSORS(UCharacterAttributeSetBase, Stamina);
 
-	UPROPERTY(BlueprintReadOnly, Category="Character Level", ReplicatedUsing = OnRep_MaxStamina)
+	UPROPERTY(BlueprintReadOnly, Category="Stamina", ReplicatedUsing = OnRep_MaxStamina)
 	FGameplayAttributeData MaxStamina;
 	ATTRIBUTE_ACCESSORS(UCharacterAttributeSetBase, MaxStamina);
+
+	UPROPERTY(BlueprintReadOnly, Category="Stamina", ReplicatedUsing = OnRep_StaminaRegen)
+	FGameplayAttributeData StaminaRegen;
+	ATTRIBUTE_ACCESSORS(UCharacterAttributeSetBase, StaminaRegen);
 	
 	// Cached Damage value, to better calculate total damage from all possible AbilitySources
 	// Only exist on the server
@@ -98,5 +102,7 @@ protected:
 	
 	UFUNCTION()
 	virtual void OnRep_MaxStamina(const FGameplayAttributeData& OldMaxStamina);
-	
+
+	UFUNCTION()
+	virtual void OnRep_StaminaRegen(const  FGameplayAttributeData& OldStaminaRegen);
 };

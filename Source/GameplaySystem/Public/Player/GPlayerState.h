@@ -45,7 +45,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category="GAS|PlayerState|Attributes")
 	int32 GetCharacterLevel() const;
 	
+	UFUNCTION(BlueprintCallable, Category="GAS|PlayerState|Attributes")
+	float GetStamina() const;
+	
+	UFUNCTION(BlueprintCallable, Category="GAS|PlayerState|Attributes")
+	float GetMaxStamina() const;
 
+	UFUNCTION(BlueprintCallable, Category="GAS|PlayerState|Attributes")
+	float GetStaminaRegen() const;
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -66,12 +74,20 @@ protected:
 	FDelegateHandle ManaChangedDelegateHandle;
 	FDelegateHandle MaxManaChangedDelegateHandle;
 	
-	FDelegateHandle CharacterLevelDelegateHandle;
+	FDelegateHandle StaminaChangedDelegateHandle;
+	FDelegateHandle MaxStaminaChangedDelegateHandle;
+	FDelegateHandle StaminaRegenChangedDelegateHandle;
 
+	FDelegateHandle CharacterLevelDelegateHandle;
+	
 	virtual void HealthChanged(const FOnAttributeChangeData& Data);
 	virtual void MaxHealthChanged(const FOnAttributeChangeData& Data);
 	virtual void ManaChanged(const FOnAttributeChangeData& Data);
 	virtual void MaxManaChanged(const FOnAttributeChangeData& Data);
+	virtual void StaminaChanged(const FOnAttributeChangeData& Data);
+	virtual void MaxStaminaChanged(const FOnAttributeChangeData& Data);
+	virtual void StaminaRegenChanged(const FOnAttributeChangeData& Data);
+	
 	virtual void CharacterLevelChanged(const FOnAttributeChangeData& Data);
 
 	// Tag change callbacks

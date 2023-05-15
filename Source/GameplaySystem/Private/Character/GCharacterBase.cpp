@@ -194,6 +194,15 @@ float ACharacterBase::GetMaxStamina() const
 	return 0.0f;
 }
 
+float ACharacterBase::GetMaxStaminaRegen() const
+{
+	if(AttributeSetBase.IsValid())
+	{
+		return AttributeSetBase->GetStaminaRegen();
+	}
+	return 0.0f;
+}
+
 // Called when the game starts or when spawned
 void ACharacterBase::BeginPlay()
 {
@@ -319,6 +328,14 @@ void ACharacterBase::SetStamina(float NewStamina)
 	if(AttributeSetBase.IsValid())
 	{
 		AttributeSetBase->SetStamina(NewStamina);
+	}
+}
+
+void ACharacterBase::SetStaminaRegen(float NewStaminaRegen)
+{
+	if(AttributeSetBase.IsValid())
+	{
+		AttributeSetBase->SetStaminaRegen(NewStaminaRegen);
 	}
 }
 

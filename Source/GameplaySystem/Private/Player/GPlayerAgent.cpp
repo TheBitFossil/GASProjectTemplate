@@ -113,6 +113,7 @@ void AGPlayerAgent::PossessedBy(AController* NewController)
 		/** Respawning	**/
 		SetHealth(GetMaxHealth());
 		SetMana(GetMaxMana());
+		SetStamina(GetMaxStamina());
 		/** End of Respawning **/
 
 		AddStartupEffects();
@@ -252,6 +253,7 @@ void AGPlayerAgent::OnRep_PlayerState()
 		// On Respawn, we are initializing our Values to Max
 		SetHealth(GetMaxHealth());
 		SetMana(GetMaxMana());
+		SetStamina(GetMaxStamina());
 	}
 }
 
