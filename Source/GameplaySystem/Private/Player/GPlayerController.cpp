@@ -36,16 +36,16 @@ void AGPlayerController::CreateHUD()
 	// Create the HUD into the viewport
 	HUDWidget = CreateWidget<UGUserWidget>(this, HUDWidgetClass);
 	HUDWidget->AddToViewport();
-
+	
 	// Set Attributes
 	HUDWidget->SetCurrentHealth(PlayerState->GetHealth());
 	HUDWidget->SetMaxHealth(PlayerState->GetMaxHealth());
 	HUDWidget->SetCurrentMana(PlayerState->GetMana());
 	HUDWidget->SetMaxMana(PlayerState->GetMaxMana());
 	HUDWidget->SetCurrentCharacterLevel(PlayerState->GetCharacterLevel());
-	HUDWidget->SetStamina(PlayerState->GetStamina());
+	HUDWidget->SetCurrentStamina(PlayerState->GetStamina());
 	HUDWidget->SetMaxStamina(PlayerState->GetMaxStamina());
-	HUDWidget->SetMaxStamina(PlayerState->GetStaminaRegen());
+	HUDWidget->SetStaminaRegen(PlayerState->GetStaminaRegen());
 	
 }
 

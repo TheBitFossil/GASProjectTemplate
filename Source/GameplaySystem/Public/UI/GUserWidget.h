@@ -21,28 +21,28 @@ public:
 
 	/**	 Attribute Setters	**/
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void SetCurrentHealth(float GetHealth);
+	void SetCurrentHealth(float CurrentHealth);
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void SetMaxHealth(float GetMaxHealth);
+	void SetMaxHealth(float MaxHealth);
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void SetCurrentMana(float GetMana);
+	void SetCurrentMana(float CurrentMana);
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void SetMaxMana(float GetMaxMana);
+	void SetMaxMana(float MaxMana);
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void SetCurrentCharacterLevel(int32 INT32);
+	void SetCurrentCharacterLevel(int32 Int32);
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void SetStamina(float GetStamina);
+	void SetCurrentStamina(float CurrentStamina);
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void SetMaxStamina(float GetMaxStamina);
+	void SetMaxStamina(float MaxStamina);
 	
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void SetStaminaRegen(float GetStaminaRegen);
+	void SetStaminaRegen(float StaminaRegen);
 
 
 	
