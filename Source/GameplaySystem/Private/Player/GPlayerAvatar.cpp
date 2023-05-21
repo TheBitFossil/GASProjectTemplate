@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Player/GPlayerAgent.h"
+#include "Player/GPlayerAvatar.h"
 
 #include "AI/PlayerAIController.h"
 #include "Camera/CameraComponent.h"
@@ -11,8 +11,9 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Player/GPlayerState.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Player/GPlayerController.h"
 
-AGPlayerAgent::AGPlayerAgent(const FObjectInitializer& ObjectInitializer)
+AGPlayerAvatar::AGPlayerAvatar(const FObjectInitializer& ObjectInitializer)
 : Super(ObjectInitializer)
 {
 	/** Camera Setup **/
@@ -58,36 +59,23 @@ AGPlayerAgent::AGPlayerAgent(const FObjectInitializer& ObjectInitializer)
 	DeadTag = FGameplayTag::RequestGameplayTag(FName("State.Dead"));
 }
 
-void AGPlayerAgent::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void AGPlayerAvatar::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis("MoveForward", this, &AGPlayerAgent::MoveForward);
-	PlayerInputComponent->BindAxis("MoveRight", this, &AGPlayerAgent::MoveRight);
-	PlayerInputComponent->BindAxis("LookUp", this, &AGPlayerAgent::LookUp);
-	PlayerInputComponent->BindAxis("Turn", this, &AGPlayerAgent::Turn);
+	PlayerInputComponent->BindAxis("MoveForward", this, &AGPlayerAvatar::MoveForward);
+	PlayerInputComponent->BindAxis("MoveRight", this, &AGPlayerAvatar::MoveRight);
+	PlayerInputComponent->BindAxis("LookUp", this, &AGPlayerAvatar::LookUp);
+	PlayerInputComponent->BindAxis("Turn", this, &AGPlayerAvatar::Turn);
 	
-	PlayerInputComponent->BindAxis("LookUpRate", this, &AGPlayerAgent::LookUpRate);
-	PlayerInputComponent->BindAxis("TurnRate", this, &AGPlayerAgent::TurnRate);
-
-	/**	New Inputsystem **/
-	/*
-	if(UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
-	{
-		// Moving
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APlayerAgent::MoveInput);
-
-		// Looking
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APlayerAgent::LookInput);
-	}
-	*/
-
+	PlayerInputComponent->BindAxis("LookUpRate", this, &AGPlayerAvatar::LookUpRate);
+	PlayerInputComponent->BindAxis("TurnRate", this, &AGPlayerAvatar::TurnRate);
 	
 	// Bind ASC and Player Input : OnRep_PlayerState
 	BindASCInput();
 }
 
-void AGPlayerAgent::PossessedBy(AController* NewController)
+void AGPlayerAvatar::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 
@@ -103,7 +91,6 @@ void AGPlayerAgent::PossessedBy(AController* NewController)
 		// Get the AttributeSet from our PlayerState
 		AttributeSetBase = PState->GetAttributeSetBase();
 		
-		// TODO: Check the dependencies between State, Base, Controller , etc and make a visual graph
 		// Init from our CharacterBase
 		InitAttributes();
 
@@ -120,22 +107,26 @@ void AGPlayerAgent::PossessedBy(AController* NewController)
 		AddCharacterAbilities();
 		
 		/**	UI **/
-		//TODO: UI
+		AGPlayerController* PlayerController = Cast<AGPlayerController>(GetController());
+		if(PlayerController)
+		{
+			PlayerController->CreateHUD();
+		}
 	}
 }
 
-void AGPlayerAgent::FinishDeath()
+void AGPlayerAvatar::FinishDeath()
 {
 	Super::FinishDeath();
 	// TODO: Finish Death
 }
 
-float AGPlayerAgent::GetStartingBoomLength()
+float AGPlayerAvatar::GetStartingBoomLength()
 {
 	return StartingBoomLength;
 }
 
-FVector AGPlayerAgent::GetStartingBoomLocation()
+FVector AGPlayerAvatar::GetStartingBoomLocation()
 {
 	return StartingBoomLocation;
 }
@@ -145,18 +136,18 @@ FVector AGPlayerAgent::GetStartingBoomLocation()
 * On the Client, BeginPlay happens before Possession.
 * So we can't use BeginPlay to do anything with the AbilitySystemComponent because we don't have it until the PlayerState replicates from possession.
 */
-void AGPlayerAgent::BeginPlay()
+void AGPlayerAvatar::BeginPlay()
 {
 	Super::BeginPlay();
 }
 
-void AGPlayerAgent::PostInitializeComponents()
+void AGPlayerAvatar::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 	// TODO: Gun here
 }
 
-void AGPlayerAgent::LookUp(float Value)
+void AGPlayerAvatar::LookUp(float Value)
 {
 	if(IsAlive())
 	{
@@ -164,7 +155,7 @@ void AGPlayerAgent::LookUp(float Value)
 	}
 }
 
-void AGPlayerAgent::Turn(float Value)
+void AGPlayerAvatar::Turn(float Value)
 {
 	if(IsAlive())
 	{
@@ -172,7 +163,7 @@ void AGPlayerAgent::Turn(float Value)
 	}
 }
 
-void AGPlayerAgent::MoveForward(float Value)
+void AGPlayerAvatar::MoveForward(float Value)
 {
 	/*const FString msg = FString::Printf(TEXT("Bool Status: %f"), GetHealth());
 	GEngine->AddOnScreenDebugMessage(-1, .5f, FColor::Red, *msg, true);*/
@@ -188,7 +179,7 @@ void AGPlayerAgent::MoveForward(float Value)
 	}
 }
 
-void AGPlayerAgent::MoveRight(float Value)
+void AGPlayerAvatar::MoveRight(float Value)
 {
 	if(IsAlive())
 	{
@@ -196,7 +187,7 @@ void AGPlayerAgent::MoveRight(float Value)
 	}
 }
 
-void AGPlayerAgent::LookUpRate(float Value)
+void AGPlayerAvatar::LookUpRate(float Value)
 {
 	if(IsAlive())
 	{
@@ -204,7 +195,7 @@ void AGPlayerAgent::LookUpRate(float Value)
 	}
 }
 
-void AGPlayerAgent::TurnRate(float Value)
+void AGPlayerAvatar::TurnRate(float Value)
 {
 	if(IsAlive())
 	{
@@ -212,13 +203,13 @@ void AGPlayerAgent::TurnRate(float Value)
 	}
 }
 
-void AGPlayerAgent::Jump()
+void AGPlayerAvatar::Jump()
 {
 	Super::Jump();
 }
 
 // Client Only
-void AGPlayerAgent::OnRep_PlayerState()
+void AGPlayerAvatar::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
 
@@ -240,12 +231,12 @@ void AGPlayerAgent::OnRep_PlayerState()
 		// TODO change this is respawning should not reset all Attributes
 		InitAttributes();
 
-		/*// We can get the PlayerController from internal Function. Only need to Cast to our Type
-		AGPlayerController* PController = Cast<AGPlayerController>(GetController());
-		if(PController)
+		// We can get the PlayerController from internal Function. Only need to Cast to our Type
+		AGPlayerController* PlayerController = Cast<AGPlayerController>(GetController());
+		if(PlayerController)
 		{
-			TODO: CreateHUD();
-		}*/
+			PlayerController->CreateHUD();
+		}
 
 		// GameplayTags
 		AbilitySystemComponent->SetTagMapCount(DeadTag,0);
@@ -258,7 +249,7 @@ void AGPlayerAgent::OnRep_PlayerState()
 }
 
 // This will map all keys from our UEnum() so we can Fire off Abilities
-void AGPlayerAgent::BindASCInput()
+void AGPlayerAvatar::BindASCInput()
 {
 	// Template to bind input and ASC from Documentation
 	if(false == ASCInputBound && AbilitySystemComponent.IsValid() && IsValid(InputComponent))

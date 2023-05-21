@@ -4,19 +4,19 @@
 
 #include "CoreMinimal.h"
 #include "Character/GCharacterBase.h"
-#include "GPlayerAgent.generated.h"
+#include "GPlayerAvatar.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class GAMEPLAYSYSTEM_API AGPlayerAgent : public ACharacterBase
+class GAMEPLAYSYSTEM_API AGPlayerAvatar : public ACharacterBase
 {
 	GENERATED_BODY()
 
 public:
 	// Setup theC-Tor with extra functionality. ObjInit is a helper for that
-	AGPlayerAgent(const class FObjectInitializer& ObjectInitializer);
+	AGPlayerAvatar(const class FObjectInitializer& ObjectInitializer);
 
 	// Calling from our PlayerController
 	virtual void PossessedBy(AController* NewController) override;

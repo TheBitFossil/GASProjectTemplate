@@ -41,7 +41,7 @@ void UCharacterAttributeSetBase::PreAttributeChange(const FGameplayAttribute& At
 	if(Attribute.AttributeName == FString("Health"))
 	{
 		NewValue = FMath::Clamp<float>(NewValue, 0, MaxHealth.GetBaseValue());
-		UE_LOG(LogTemp, Error, TEXT("Health: %f and MaxHealth: %f"), Health.GetCurrentValue(), MaxHealth.GetBaseValue());
+		//UE_LOG(LogTemp, Error, TEXT("Health: %f and MaxHealth: %f"), Health.GetCurrentValue(), MaxHealth.GetBaseValue());
 	}
 	if(Attribute == GetManaAttribute())
 	{
