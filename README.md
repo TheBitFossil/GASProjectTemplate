@@ -11,14 +11,9 @@
 <p align="center"> <a href="https://www.w3schools.com/cpp/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-original.svg" alt="cplusplus" width="36" height="36"/> </a> <a href="https://www.w3schools.com/cs/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/csharp/csharp-original.svg" alt="csharp" width="36" height="36"/> </a> <a href="https://www.linux.org/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg" alt="linux" width="36" height="36"/> </a> <a href="https://unity.com/" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/unity3d/unity3d-icon.svg" alt="unity" width="36" height="40"/> </a> <a href="https://unrealengine.com/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/kenangundogan/fontisto/036b7eca71aab1bef8e6a0518f7329f13ed62f6b/icons/svg/brand/unreal-engine.svg" alt="unreal" width="36" height="36"/> </a> </p>
 
 # GAS Template Project
-*Taking the GameplayAbilitySystem and GASDocumentation to learn and create my own version.*\
-\
-*I made this guide for everyone who is interested in starting with the GAS. I focused on making this  
-easy to read and learn from mainly for beginners of the GAS. When you are ready and have a working template 
-I highly recommend taking the next step and reading the other sources which are available online.*
+I have embarked on a journey to learn and develop my own version of the **Gameplay Ability System (GAS), utilizing the GAS Documentation as a valuable resource**. With the aim of making it accessible to beginners, I have created a comprehensive guide that is easy to read and learn from. Once you have grasped the fundamentals and have a functional template, I strongly encourage you to explore additional online resources for further knowledge.
 
-*Next to the source code you will find a template project, indepth explanation, step by step instructions 
-and visualization of the responsible components*
+Within the guide, you will find not only the source code but also a **template project, detailed explanations, step-by-step instructions, and visual representations** of the various components involved. It is my intention to provide a comprehensive learning experience for individuals interested in starting their journey with the GAS.
 
 # Guide
 * How to initialize GAS ?
